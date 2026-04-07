@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Teleo Title - Company Snapshot with Jesica Headshot</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .featured-team-layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 28px;
+      align-items: center;
+    }
+    .team-headshot {
+      width: 100%;
+      max-width: 280px;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      box-shadow: 0 10px 28px rgba(15,23,32,.10);
+      display: block;
+    }
+    @media (max-width: 780px) {
+      .featured-team-layout {
+        grid-template-columns: 1fr;
+      }
+      .headshot-col {
+        display: flex;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="brand">TeleoTitle</div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="company.html">Company</a>
+      <a href="company-headshot.html">Company v2</a>
+    </nav>
+  </header>
+
+  <main class="container company-page">
+    <section class="section intro centered">
+      <h1>Meet the Team</h1>
+      <p>A reconstructed working copy of the Teleo Title team page with Jesica's headshot layout added for review.</p>
+    </section>
+
+    <section class="card featured-team-member featured-team-layout">
+      <div class="headshot-col">
+        <img class="team-headshot" src="images/jesica-headshot.jpeg" alt="Jesica Green-Cargill headshot" />
+      </div>
+      <div class="bio-col">
+        <h2>Jesica Green-Cargill</h2>
+        <p class="role">Branch Manager &amp; Senior Escrow Officer</p>
+        <p>Jesica brings over 20 years of experience in the Texas title industry, with a strong background in residential and commercial escrow. She has supported branch launches, managed high-volume pipelines, and built lasting relationships with realtors, lenders, builders, and investors. Recruited by Fidelity National Title to help open a new Pasadena branch, she played a key role in establishing operations and maintaining strong production. Known for her ability to keep complex transactions on track and avoid last-minute surprises, she brings steady execution to every file. Now based in the Georgetown area, Jesica brings proven performance and a strong local presence to Teleo Title, reinforcing the quality and reliability behind every closing.</p>
+      </div>
+    </section>
+
+    <section class="grid two-up team-grid">
+      <article class="card">
+        <h2>Blake Teipel, Ph.D.</h2>
+        <p class="role">Managing Partner</p>
+        <p>Blake is a seasoned executive and three-time founder with deep experience building and guiding organizations through growth. At Teleo Title, he provides executive leadership and strategic direction, ensuring the company remains focused on service, clarity, and long-term reliability while supporting the team with the resources and structure needed to succeed.</p>
+        <blockquote>"Real estate closings should be secure, seamless, and modern. We're building Teleo Title with the experts who know this business best."</blockquote>
+      </article>
+      <article class="card">
+        <h2>Don Ness</h2>
+        <p class="role">Managing Partner</p>
+        <p>Don is a veteran software engineer with 20 years of experience across enterprise systems, startups, and a decade running his own consultancy. Through Abode Labs, he leads technology and product for Teleo Title, building tools that support accuracy and reliable service. He lives in Georgetown with his wife and four children.</p>
+        <blockquote>"Title work depends on judgment, coordination, and timing. Software should support those moments, not distract from them, so professionals can focus on the decisions that matter."</blockquote>
+      </article>
+    </section>
+  </main>
+</body>
+</html>
