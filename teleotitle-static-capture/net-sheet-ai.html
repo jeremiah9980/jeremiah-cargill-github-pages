@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Net Sheet Calculator — Teleo Title</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #1a1a18;
+    --ink2: #3d3d3a;
+    --ink3: #7a7a75;
+    --ink4: #b0b0ab;
+    --paper: #fafaf7;
+    --surface: #f3f3ef;
+    --surface2: #e8e8e3;
+    --gold: #b07d2a;
+    --gold-bg: #faf3e6;
+    --teal: #0f6e56;
+    --teal-bg: #e4f5ef;
+    --red: #a32d2d;
+    --red-bg: #fdf0f0;
+    --border: rgba(26,26,24,0.10);
+    --border2: rgba(26,26,24,0.18);
+    --radius: 10px;
+    --radius-lg: 16px;
+    --radius-xl: 22px;
+  }
+
+  html { font-size: 16px; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    min-height: 100vh;
+    line-height: 1.5;
+  }
+
+  /* NAV */
+  nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2rem;
+    height: 60px;
+    border-bottom: 0.5px solid var(--border2);
+    background: var(--paper);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    text-decoration: none;
+  }
+  .nav-logo-mark {
+    width: 30px; height: 30px;
+    background: var(--ink);
+    border-radius: 7px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .nav-logo-mark svg { width: 16px; height: 16px; fill: var(--paper); }
+  .nav-logo-text {
+    font-family: 'DM Serif Display', serif;
+    font-size: 16px;
+    color: var(--ink);
+  }
+  .nav-links { display: flex; gap: 1.5rem; align-items: center; }
+  .nav-links a {
+    font-size: 13px;
+    color: var(--ink3);
+    text-decoration: none;
+    transition: color .15s;
+  }
+  .nav-links a:hover { color: var(--ink); }
+  .nav-cta {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink) !important;
+    border: 0.5px solid var(--border2);
+    padding: 6px 14px;
+    border-radius: var(--radius);
+  }
+
+  /* HERO */
+  .hero {
+    text-align: center;
+    padding: 3.5rem 1.5rem 2.5rem;
+    border-bottom: 0.5px solid var(--border);
+  }
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--gold-bg);
+    color: var(--gold);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    border-radius: 20px;
+    margin-bottom: 1.25rem;
+  }
+  .hero-badge-dot {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--gold);
+  }
+  .hero h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(28px, 5vw, 46px);
+    font-weight: 400;
+    line-height: 1.1;
+    color: var(--ink);
+    margin-bottom: .75rem;
+  }
+  .hero h1 em { font-style: italic; color: var(--ink3); }
+  .hero p {
+    font-size: 15px;
+    color: var(--ink3);
+    font-weight: 300;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  /* LAYOUT */
+  .page-body {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 380px;
+    gap: 0;
+    max-width: 1200px;
+    margin: 0 auto;
+    min-height: calc(100vh - 60px - 120px);
+  }
+  @media (max-width: 820px) {
+    .page-body { grid-template-columns: 1fr; }
+    .results-col { border-left: none; border-top: 0.5px solid var(--border2); }
+  }
+
+  /* LEFT — CHAT */
+  .chat-col {
+    border-right: 0.5px solid var(--border2);
+    display: flex;
+    flex-direction: column;
+  }
+  .chat-header {
+    padding: 1rem 1.5rem;
+    border-bottom: 0.5px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .chat-header-left { display: flex; align-items: center; gap: 10px; }
+  .chat-avatar {
+    width: 34px; height: 34px;
+    background: var(--ink);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .chat-avatar svg { width: 16px; height: 16px; fill: var(--paper); }
+  .chat-agent-name { font-size: 13px; font-weight: 500; }
+  .chat-agent-sub { font-size: 11px; color: var(--ink3); }
+  .chat-status {
+    display: flex; align-items: center; gap: 5px;
+    font-size: 11px; color: var(--teal);
+  }
+  .status-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--teal);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+
+  .chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    min-height: 400px;
+    max-height: 520px;
+  }
+  .msg { display: flex; flex-direction: column; }
+  .msg.agent { align-items: flex-start; }
+  .msg.user  { align-items: flex-end; }
+  .msg-sender {
+    font-size: 10px;
+    color: var(--ink4);
+    margin-bottom: 3px;
+    padding: 0 4px;
+  }
+  .msg-bubble {
+    max-width: 88%;
+    padding: 9px 13px;
+    font-size: 13px;
+    line-height: 1.55;
+    border-radius: 14px;
+  }
+  .msg.agent .msg-bubble {
+    background: white;
+    color: var(--ink);
+    border: 0.5px solid var(--border2);
+    border-bottom-left-radius: 4px;
+  }
+  .msg.user .msg-bubble {
+    background: var(--ink);
+    color: white;
+    border-bottom-right-radius: 4px;
+  }
+  .msg-bubble.typing {
+    background: white;
+    border: 0.5px solid var(--border2);
+    padding: 12px 16px;
+  }
+  .typing-dots { display: flex; gap: 4px; }
+  .typing-dots span {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--ink3);
+    animation: bounce .9s infinite;
+  }
+  .typing-dots span:nth-child(2) { animation-delay: .15s; }
+  .typing-dots span:nth-child(3) { animation-delay: .3s; }
+  @keyframes bounce { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-5px)} }
+
+  .extracted-pills {
+    display: flex; flex-wrap: wrap; gap: 4px;
+    margin-top: 7px;
+  }
+  .pill {
+    display: inline-flex; align-items: center; gap: 4px;
+    background: var(--teal-bg);
+    color: var(--teal);
+    font-size: 10px; font-weight: 500;
+    padding: 3px 8px;
+    border-radius: 10px;
+  }
+  .pill svg { width: 9px; height: 9px; fill: var(--teal); }
+
+  .chat-suggestions {
+    padding: .75rem 1.5rem;
+    display: flex; flex-wrap: wrap; gap: 6px;
+    border-top: 0.5px solid var(--border);
+  }
+  .suggestion-chip {
+    font-size: 12px;
+    color: var(--ink3);
+    border: 0.5px solid var(--border2);
+    background: white;
+    padding: 5px 11px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all .15s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .suggestion-chip:hover {
+    background: var(--surface);
+    color: var(--ink);
+    border-color: var(--ink3);
+  }
+
+  .chat-input-area {
+    padding: 1rem 1.5rem;
+    border-top: 0.5px solid var(--border);
+    display: flex;
+    gap: 10px;
+    align-items: flex-end;
+  }
+  .chat-input-wrap { flex: 1; position: relative; }
+  .chat-input {
+    width: 100%;
+    min-height: 42px;
+    max-height: 120px;
+    border: 0.5px solid var(--border2);
+    border-radius: var(--radius);
+    padding: 10px 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    color: var(--ink);
+    background: white;
+    resize: none;
+    outline: none;
+    line-height: 1.4;
+    transition: border-color .15s;
+    overflow-y: hidden;
+  }
+  .chat-input:focus { border-color: var(--gold); }
+  .chat-input::placeholder { color: var(--ink4); }
+  .send-btn {
+    width: 42px; height: 42px;
+    background: var(--ink);
+    border: none;
+    border-radius: var(--radius);
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    transition: background .15s, transform .1s;
+  }
+  .send-btn:hover { background: #333; }
+  .send-btn:active { transform: scale(.95); }
+  .send-btn svg { width: 16px; height: 16px; fill: white; }
+  .send-btn:disabled { background: var(--surface2); cursor: not-allowed; }
+
+  /* RIGHT — NET SHEET */
+  .results-col {
+    display: flex;
+    flex-direction: column;
+    background: var(--paper);
+  }
+  .results-header {
+    padding: 1rem 1.5rem;
+    border-bottom: 0.5px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .results-header h2 {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink3);
+    text-transform: uppercase;
+    letter-spacing: .05em;
+  }
+  .completeness-bar-wrap { display: flex; align-items: center; gap: 8px; }
+  .completeness-bar {
+    width: 80px; height: 4px;
+    background: var(--surface2);
+    border-radius: 2px; overflow: hidden;
+  }
+  .completeness-fill {
+    height: 100%;
+    background: var(--teal);
+    border-radius: 2px;
+    transition: width .4s ease;
+  }
+  .completeness-pct { font-size: 11px; color: var(--teal); font-weight: 500; }
+
+  .net-summary {
+    padding: 1.5rem;
+    background: var(--ink);
+    margin: 0;
+  }
+  .net-summary-label { font-size: 10px; text-transform: uppercase; letter-spacing: .08em; color: rgba(255,255,255,.45); margin-bottom: 2px; }
+  .net-summary-type { font-family: 'DM Serif Display', serif; font-size: 17px; color: white; margin-bottom: 1rem; }
+  .net-amount { font-family: 'DM Serif Display', serif; font-size: 46px; color: white; line-height: 1; }
+  .net-amount.neg { color: #f09595; }
+  .net-amount-sub { font-size: 12px; color: rgba(255,255,255,.45); margin-top: 4px; }
+  .net-placeholder { font-family: 'DM Serif Display', serif; font-size: 22px; color: rgba(255,255,255,.25); font-style: italic; }
+
+  .breakdown-body { padding: 1.25rem 1.5rem; flex: 1; overflow-y: auto; }
+
+  .section-head {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: .07em;
+    color: var(--ink4);
+    margin-bottom: .5rem;
+    padding-bottom: .25rem;
+    border-bottom: 0.5px solid var(--border);
+  }
+  .breakdown-section { margin-bottom: 1.25rem; }
+  .breakdown-row {
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding: 4px 0;
+    font-size: 13px;
+    color: var(--ink2);
+    border-bottom: 0.5px solid transparent;
+    transition: background .1s;
+  }
+  .breakdown-row:hover { background: var(--surface); margin: 0 -4px; padding: 4px 4px; border-radius: 4px; }
+  .breakdown-val { font-weight: 500; }
+  .breakdown-val.debit { color: var(--red); }
+  .breakdown-val.credit { color: var(--teal); }
+  .breakdown-total {
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding: 8px 0 0;
+    margin-top: 4px;
+    border-top: 0.5px solid var(--border2);
+    font-size: 13px; font-weight: 500;
+  }
+  .total-debit { color: var(--red); font-size: 14px; }
+  .total-credit { color: var(--teal); font-size: 14px; }
+
+  .bar-viz {
+    display: flex; height: 6px; border-radius: 3px; overflow: hidden;
+    margin: 1rem 0 .5rem;
+    background: var(--surface2);
+  }
+  .bar-seg { height: 100%; transition: width .4s ease; }
+  .bar-legend { display: flex; flex-wrap: wrap; gap: 6px 14px; margin-bottom: 1rem; }
+  .leg-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--ink3); }
+  .leg-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+
+  .net-total-card {
+    background: var(--surface);
+    border-radius: var(--radius);
+    padding: 12px 14px;
+    margin-bottom: 1.25rem;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .net-total-label { font-family: 'DM Serif Display', serif; font-size: 14px; }
+  .net-total-val { font-family: 'DM Serif Display', serif; font-size: 20px; }
+
+  .field-chips {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 6px;
+    margin-bottom: 1.25rem;
+  }
+  .field-chip {
+    background: white;
+    border: 0.5px solid var(--border2);
+    border-radius: var(--radius);
+    padding: 8px 10px;
+    font-size: 11px;
+  }
+  .field-chip-label { color: var(--ink4); margin-bottom: 2px; }
+  .field-chip-val { font-weight: 500; color: var(--ink); font-size: 12px; }
+  .field-chip-val.empty { color: var(--ink4); font-style: italic; font-weight: 400; }
+  .field-chip.filled { border-left: 2px solid var(--teal); }
+  .field-chip.unfilled { border-left: 2px solid var(--border2); }
+
+  .action-area { padding: 1rem 1.5rem; border-top: 0.5px solid var(--border); display: flex; flex-direction: column; gap: 8px; }
+  .btn-primary {
+    width: 100%; padding: 11px;
+    background: var(--gold);
+    border: none; border-radius: var(--radius);
+    color: white;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px; font-weight: 500;
+    cursor: pointer; letter-spacing: .02em;
+    transition: background .15s;
+  }
+  .btn-primary:hover { background: #9a6c1f; }
+  .btn-primary:disabled { background: var(--surface2); color: var(--ink4); cursor: not-allowed; }
+  .btn-secondary {
+    width: 100%; padding: 10px;
+    background: transparent;
+    border: 0.5px solid var(--border2);
+    border-radius: var(--radius);
+    color: var(--ink2);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background .15s;
+  }
+  .btn-secondary:hover { background: var(--surface); }
+  .disclaimer {
+    font-size: 10px; color: var(--ink4);
+    text-align: center; line-height: 1.5;
+    padding: 0 .5rem;
+  }
+
+  /* MODE TABS */
+  .mode-tabs {
+    display: flex; gap: 0;
+    border: 0.5px solid var(--border2);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-bottom: 0;
+  }
+  .mode-tab {
+    flex: 1; padding: 6px 12px;
+    font-size: 12px; font-weight: 400;
+    font-family: 'DM Sans', sans-serif;
+    background: transparent;
+    border: none;
+    color: var(--ink3);
+    cursor: pointer;
+    transition: all .15s;
+  }
+  .mode-tab.active {
+    background: var(--ink);
+    color: white;
+    font-weight: 500;
+  }
+
+  /* PRINT */
+  @media print {
+    nav, .chat-col, .hero, .action-area, .chat-header, .hero-badge { display: none !important; }
+    .page-body { grid-template-columns: 1fr; }
+    .results-col { border: none; }
+    .net-summary { background: #1a1a18 !important; -webkit-print-color-adjust: exact; }
+  }
+
+  /* EMPTY STATE */
+  .empty-state {
+    flex: 1;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 2rem;
+    text-align: center;
+  }
+  .empty-icon {
+    width: 48px; height: 48px;
+    background: var(--surface);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 1rem;
+  }
+  .empty-icon svg { width: 22px; height: 22px; fill: var(--ink4); }
+  .empty-title { font-family: 'DM Serif Display', serif; font-size: 18px; color: var(--ink); margin-bottom: .4rem; }
+  .empty-body { font-size: 13px; color: var(--ink3); line-height: 1.6; max-width: 260px; }
+
+  .error-msg {
+    background: var(--red-bg);
+    border: 0.5px solid var(--red);
+    border-radius: var(--radius);
+    padding: 10px 14px;
+    font-size: 12px;
+    color: var(--red);
+    margin: .5rem 1.5rem;
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo">
+    <div class="nav-logo-mark">
+      <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="white" stroke-width="2" fill="none"/></svg>
+    </div>
+    <span class="nav-logo-text">Teleo Title</span>
+  </a>
+  <div class="nav-links">
+    <a href="/services">Services</a>
+    <a href="/company">Company</a>
+    <a href="/contact" class="nav-cta">Contact us</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">
+    <div class="hero-badge-dot"></div>
+    AI-powered tool
+  </div>
+  <h1>Net sheet calculator<br><em>just tell us the deal</em></h1>
+  <p>Describe your transaction in plain language — our assistant fills in the numbers and builds the net sheet instantly.</p>
+</div>
+
+<div class="page-body">
+
+  <!-- LEFT: AI CHAT -->
+  <div class="chat-col">
+    <div class="chat-header">
+      <div class="chat-header-left">
+        <div class="chat-avatar">
+          <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="white" stroke-width="2" fill="none"/></svg>
+        </div>
+        <div>
+          <div class="chat-agent-name">Teleo Title Assistant</div>
+          <div class="chat-agent-sub">Net sheet specialist</div>
+        </div>
+      </div>
+      <div class="chat-status">
+        <div class="status-dot"></div>
+        Online
+      </div>
+    </div>
+
+    <div class="chat-messages" id="chatMessages">
+      <div class="msg agent">
+        <div class="msg-sender">Teleo Title Assistant</div>
+        <div class="msg-bubble">
+          Hi! I'll build your net sheet from a quick conversation. Just tell me about the transaction — sale price, whether there's an existing loan, and commission structure is a great place to start.<br><br>Or try one of the prompts below.
+        </div>
+      </div>
+    </div>
+
+    <div class="chat-suggestions" id="suggestions">
+      <button class="suggestion-chip" onclick="useSuggestion(this)">$485k sale, Georgetown, seller owes $310k, 3% each side</button>
+      <button class="suggestion-chip" onclick="useSuggestion(this)">Residential buyer, $550k purchase, 20% down, Williamson Co</button>
+      <button class="suggestion-chip" onclick="useSuggestion(this)">Commercial sale $1.2M, Travis County, no HOA</button>
+      <button class="suggestion-chip" onclick="useSuggestion(this)">Refinance only, $380k loan, no commissions</button>
+    </div>
+
+    <div id="errorArea"></div>
+
+    <div class="chat-input-area">
+      <div class="chat-input-wrap">
+        <textarea
+          class="chat-input"
+          id="chatInput"
+          placeholder="Describe the transaction..."
+          rows="1"
+          onkeydown="handleKey(event)"
+          oninput="autoResize(this)"
+        ></textarea>
+      </div>
+      <button class="send-btn" id="sendBtn" onclick="sendMessage()">
+        <svg viewBox="0 0 24 24"><path d="M22 2L11 13M22 2L15 22 11 13 2 9l20-7z"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- RIGHT: NET SHEET RESULTS -->
+  <div class="results-col">
+    <div class="results-header">
+      <h2>Net sheet</h2>
+      <div style="display:flex;align-items:center;gap:10px">
+        <div class="mode-tabs" id="modeTabs" style="display:none">
+          <button class="mode-tab active" id="tab-seller" onclick="setDisplayMode('seller')">Seller</button>
+          <button class="mode-tab" id="tab-buyer" onclick="setDisplayMode('buyer')">Buyer</button>
+        </div>
+        <div class="completeness-bar-wrap">
+          <div class="completeness-bar"><div class="completeness-fill" id="completenessBar" style="width:0%"></div></div>
+          <span class="completeness-pct" id="completenessPct">0%</span>
+        </div>
+      </div>
+    </div>
+
+    <div id="emptyState" class="empty-state">
+      <div class="empty-icon">
+        <svg viewBox="0 0 24 24"><path d="M9 7H6a2 2 0 00-2 2v9a2 2 0 002 2h9a2 2 0 002-2v-3M9 7V5a2 2 0 012-2h6l4 4v10a2 2 0 01-2 2h-3M9 7h6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="empty-title">Start a conversation</div>
+      <div class="empty-body">Tell the assistant about the deal and your net sheet will appear here automatically.</div>
+    </div>
+
+    <div id="netSheetResults" style="display:none;flex-direction:column;flex:1">
+      <div class="net-summary" id="netSummary">
+        <div class="net-summary-label" id="netLabel">Estimated net proceeds</div>
+        <div class="net-summary-type" id="netType">After all closing costs</div>
+        <div class="net-amount" id="netAmount">—</div>
+        <div class="net-amount-sub" id="netSub"></div>
+      </div>
+
+      <div class="breakdown-body">
+        <div class="field-chips" id="fieldChips"></div>
+
+        <div class="bar-viz" id="barViz"></div>
+        <div class="bar-legend" id="barLegend"></div>
+
+        <div class="breakdown-section" id="creditsSection" style="display:none">
+          <div class="section-head">Credits</div>
+          <div id="creditsRows"></div>
+          <div class="breakdown-total">
+            <span>Total credits</span>
+            <span class="total-credit" id="creditsTotal"></span>
+          </div>
+        </div>
+
+        <div class="breakdown-section" id="debitsSection" style="display:none">
+          <div class="section-head">Debits &amp; fees</div>
+          <div id="debitsRows"></div>
+          <div class="breakdown-total">
+            <span>Total debits</span>
+            <span class="total-debit" id="debitsTotal"></span>
+          </div>
+        </div>
+
+        <div class="net-total-card" id="netTotalCard" style="display:none">
+          <span class="net-total-label" id="netTotalLabel">Estimated net proceeds</span>
+          <span class="net-total-val" id="netTotalVal"></span>
+        </div>
+      </div>
+
+      <div class="action-area">
+        <button class="btn-primary" id="openOrderBtn" disabled>Open an order with Teleo Title</button>
+        <button class="btn-secondary" onclick="window.print()">Print / save as PDF</button>
+        <div class="disclaimer">Estimates only. Texas promulgated rates apply to title insurance. Actual fees confirmed at time of order. Teleo Title · Georgetown, TX · (512) 763-7493</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const API_ENDPOINT = '/api/chat';
+
+const fmt = n => '$' + Math.round(Math.abs(n)).toLocaleString();
+const pct = (a,b) => b ? ((Math.abs(a)/b)*100).toFixed(1)+'%' : '0%';
+
+let conversationHistory = [];
+let currentFields = {};
+let displayMode = 'seller';
+let isLoading = false;
+
+function txRate(price) {
+  if (price <= 100000) return price * 0.0087;
+  if (price <= 1000000) return 100000*0.0087 + (price-100000)*0.00535;
+  return 100000*0.0087 + 900000*0.00535 + (price-1000000)*0.00302;
+}
+function lenderRate(loan) {
+  if (loan <= 100000) return loan * 0.0080;
+  if (loan <= 1000000) return 100000*0.0080 + (loan-100000)*0.00483;
+  return 100000*0.0080 + 900000*0.00483 + (loan-1000000)*0.00261;
+}
+
+function calcNetSheet(fields) {
+  const price = fields.sale_price || 0;
+  const payoff = fields.loan_payoff || 0;
+  const listPct = (fields.list_commission_pct || 0) / 100;
+  const buyPct  = (fields.buyer_commission_pct || 0) / 100;
+  const concessions = fields.concessions || 0;
+  const loanAmt = fields.loan_amount || 0;
+  const loanType = fields.loan_type || 'conventional';
+  const mode = fields.transaction_mode || 'seller';
+
+  let credits = [], debits = [];
+
+  if (mode === 'seller') {
+    credits.push({ label: 'Sale price', amt: price });
+    if (listPct) debits.push({ label: `Listing commission (${(listPct*100).toFixed(1)}%)`, amt: price * listPct });
+    if (buyPct)  debits.push({ label: `Buyer agent commission (${(buyPct*100).toFixed(1)}%)`, amt: price * buyPct });
+    if (payoff)  debits.push({ label: 'Loan payoff', amt: payoff });
+    if (fields.owner_policy !== false) debits.push({ label: "Owner's title policy", amt: txRate(price) });
+    debits.push({ label: 'Teleo Title closing fee', amt: 595 });
+    debits.push({ label: 'Recording fee (est.)', amt: 150 });
+    if (fields.transaction_type === 'commercial') debits.push({ label: 'Commercial endorsements', amt: 250 });
+    if (fields.has_survey) debits.push({ label: 'Survey', amt: 650 });
+    if (fields.has_hoa) debits.push({ label: 'HOA transfer / resale cert.', amt: 350 });
+    if (fields.home_warranty) debits.push({ label: 'Home warranty', amt: 575 });
+    if (concessions) debits.push({ label: 'Seller concessions / credits', amt: concessions });
+    debits.push({ label: 'State + county transfer tax (est.)', amt: price * 0.001 });
+  } else {
+    credits.push({ label: 'Sale price', amt: price });
+    if (concessions) credits.push({ label: 'Seller concessions', amt: concessions });
+    if (loanAmt) credits.push({ label: 'Loan amount', amt: loanAmt });
+    if (fields.lender_policy !== false && loanAmt && loanType !== 'cash') {
+      debits.push({ label: "Lender's title policy", amt: lenderRate(loanAmt) });
+    }
+    debits.push({ label: 'Teleo Title closing fee', amt: 595 });
+    debits.push({ label: 'Recording & endorsements', amt: 250 });
+    debits.push({ label: 'Title search & exam', amt: 195 });
+    if (loanAmt && loanType !== 'cash') {
+      debits.push({ label: 'Origination fee (est. 1%)', amt: loanAmt * 0.01 });
+      debits.push({ label: 'Appraisal (est.)', amt: 600 });
+      debits.push({ label: 'Prepaid interest (15 days est.)', amt: loanAmt * 0.07/365*15 });
+      debits.push({ label: 'Initial escrow (3 mo. est.)', amt: price * 0.022/12*3 });
+      if (loanType === 'fha') debits.push({ label: 'FHA upfront MIP (1.75%)', amt: loanAmt * 0.0175 });
+    }
+    if (fields.has_survey) debits.push({ label: 'Survey', amt: 650 });
+    if (fields.has_hoa) debits.push({ label: 'HOA dues proration (est.)', amt: 300 });
+  }
+
+  const totalCredits = credits.reduce((s,r) => s+r.amt, 0);
+  const totalDebits  = debits.reduce((s,r) => s+r.amt, 0);
+  const net = totalCredits - totalDebits;
+  return { credits, debits, totalCredits, totalDebits, net, mode };
+}
+
+function renderNetSheet(fields) {
+  const result = calcNetSheet(fields);
+  const { credits, debits, totalCredits, totalDebits, net, mode } = result;
+
+  document.getElementById('emptyState').style.display = 'none';
+  document.getElementById('netSheetResults').style.display = 'flex';
+  document.getElementById('modeTabs').style.display = 'flex';
+
+  document.getElementById('netLabel').textContent = mode === 'seller' ? 'Estimated net proceeds' : 'Estimated cash to close';
+  document.getElementById('netType').textContent = mode === 'seller' ? 'After all closing costs' : 'Total funds needed';
+  const netEl = document.getElementById('netAmount');
+  netEl.textContent = fields.sale_price ? fmt(net) : '—';
+  netEl.className = 'net-amount' + (net < 0 ? ' neg' : '');
+  document.getElementById('netSub').textContent = fields.sale_price
+    ? (mode === 'seller' ? `${pct(net, totalCredits)} of sale price retained` : `${pct(totalDebits, fields.sale_price)} of purchase in closing costs`)
+    : '';
+
+  if (totalDebits > 0) {
+    const commD = debits.filter(d=>d.label.toLowerCase().includes('commission')).reduce((s,r)=>s+r.amt,0);
+    const titleD = debits.filter(d=>d.label.toLowerCase().match(/title|closing|recording|search|endors/)).reduce((s,r)=>s+r.amt,0);
+    const loanD = debits.filter(d=>d.label.toLowerCase().match(/payoff|loan|origination|appraisal|mip|prepaid|escrow/)).reduce((s,r)=>s+r.amt,0);
+    const otherD = Math.max(0, totalDebits - commD - titleD - loanD);
+    const segs = [
+      {pct: commD/totalDebits*100, color:'#D85A30', label:'Commissions'},
+      {pct: loanD/totalDebits*100, color:'#378ADD', label:'Loan costs'},
+      {pct: titleD/totalDebits*100, color:'#1D9E75', label:'Title & closing'},
+      {pct: otherD/totalDebits*100, color:'#888780', label:'Other'},
+    ].filter(s=>s.pct > 0.5);
+    document.getElementById('barViz').innerHTML = segs.map(s=>`<div class="bar-seg" style="width:${s.pct.toFixed(1)}%;background:${s.color}"></div>`).join('');
+    document.getElementById('barLegend').innerHTML = segs.map(s=>`<span class="leg-item"><span class="leg-dot" style="background:${s.color}"></span>${s.label}</span>`).join('');
+  }
+
+  const renderRows = (rows, id, cls) => {
+    document.getElementById(id).innerHTML = rows.map(r =>
+      `<div class="breakdown-row"><span>${r.label}</span><span class="breakdown-val ${cls}">${fmt(r.amt)}</span></div>`
+    ).join('');
+  };
+
+  document.getElementById('creditsSection').style.display = credits.length ? '' : 'none';
+  document.getElementById('debitsSection').style.display = debits.length ? '' : 'none';
+  document.getElementById('netTotalCard').style.display = fields.sale_price ? '' : 'none';
+
+  renderRows(credits, 'creditsRows', 'credit');
+  renderRows(debits, 'debitsRows', 'debit');
+  document.getElementById('creditsTotal').textContent = fmt(totalCredits);
+  document.getElementById('debitsTotal').textContent = fmt(totalDebits);
+  document.getElementById('netTotalLabel').textContent = mode === 'seller' ? 'Estimated net proceeds' : 'Cash to close';
+  document.getElementById('netTotalVal').textContent = fmt(Math.abs(net));
+
+  renderFieldChips(fields);
+  updateCompleteness(fields);
+
+  if (fields.sale_price) {
+    document.getElementById('openOrderBtn').disabled = false;
+  }
+}
+
+function renderFieldChips(fields) {
+  const defs = [
+    { key:'sale_price', label:'Sale price', fmt: v=>`$${Math.round(v).toLocaleString()}` },
+    { key:'loan_payoff', label:'Loan payoff', fmt: v=>`$${Math.round(v).toLocaleString()}` },
+    { key:'list_commission_pct', label:'Listing comm.', fmt: v=>`${v}%` },
+    { key:'buyer_commission_pct', label:'Buyer comm.', fmt: v=>`${v}%` },
+    { key:'county', label:'County', fmt: v=>v },
+    { key:'transaction_type', label:'Type', fmt: v=>v },
+    { key:'has_hoa', label:'HOA', fmt: v=>v?'Yes':'No' },
+    { key:'home_warranty', label:'Warranty', fmt: v=>v?'Yes':'No' },
+  ];
+  document.getElementById('fieldChips').innerHTML = defs.map(d => {
+    const val = fields[d.key];
+    const filled = val !== undefined && val !== null && val !== '';
+    return `<div class="field-chip ${filled?'filled':'unfilled'}">
+      <div class="field-chip-label">${d.label}</div>
+      <div class="field-chip-val ${filled?'':'empty'}">${filled ? d.fmt(val) : 'not set'}</div>
+    </div>`;
+  }).join('');
+}
+
+function updateCompleteness(fields) {
+  const required = ['sale_price','loan_payoff','list_commission_pct','buyer_commission_pct','county'];
+  const filled = required.filter(k => fields[k] !== undefined && fields[k] !== null && fields[k] !== '').length;
+  const pctVal = Math.round(filled / required.length * 100);
+  document.getElementById('completenessBar').style.width = pctVal + '%';
+  document.getElementById('completenessPct').textContent = pctVal + '%';
+}
+
+function setDisplayMode(mode) {
+  document.getElementById('tab-seller').classList.toggle('active', mode === 'seller');
+  document.getElementById('tab-buyer').classList.toggle('active', mode === 'buyer');
+  currentFields.transaction_mode = mode;
+  if (Object.keys(currentFields).length > 0) renderNetSheet(currentFields);
+}
+
+function appendMessage(role, content, pills) {
+  const msgs = document.getElementById('chatMessages');
+  const div = document.createElement('div');
+  div.className = `msg ${role}`;
+  let pillsHtml = '';
+  if (pills && pills.length) {
+    pillsHtml = `<div class="extracted-pills">${pills.map(p=>`<span class="pill"><svg viewBox="0 0 10 10"><path d="M2 5l2.5 2.5L8 3" stroke="#0f6e56" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>${p}</span>`).join('')}</div>`;
+  }
+  div.innerHTML = `<div class="msg-sender">${role==='agent'?'Teleo Title Assistant':'You'}</div><div class="msg-bubble">${content}${pillsHtml}</div>`;
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+  return div;
+}
+
+function showTyping() {
+  const msgs = document.getElementById('chatMessages');
+  const div = document.createElement('div');
+  div.className = 'msg agent';
+  div.id = 'typingIndicator';
+  div.innerHTML = `<div class="msg-sender">Teleo Title Assistant</div><div class="msg-bubble typing"><div class="typing-dots"><span></span><span></span><span></span></div></div>`;
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function removeTyping() {
+  const el = document.getElementById('typingIndicator');
+  if (el) el.remove();
+}
+
+function showError(msg) {
+  const area = document.getElementById('errorArea');
+  area.innerHTML = `<div class="error-msg">${msg}</div>`;
+  setTimeout(() => area.innerHTML = '', 5000);
+}
+
+async function sendMessage() {
+  const input = document.getElementById('chatInput');
+  const text = input.value.trim();
+  if (!text || isLoading) return;
+
+  input.value = '';
+  autoResize(input);
+  document.getElementById('suggestions').style.display = 'none';
+
+  appendMessage('user', text);
+  conversationHistory.push({ role: 'user', content: text });
+
+  isLoading = true;
+  document.getElementById('sendBtn').disabled = true;
+  showTyping();
+
+  try {
+    const response = await fetch(API_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        messages: conversationHistory,
+        current_fields: currentFields
+      })
+    });
+
+    removeTyping();
+
+    if (!response.ok) {
+      const err = await response.json().catch(() => ({}));
+      throw new Error(err.error || `Server error ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    if (data.updated_fields) {
+      currentFields = { ...currentFields, ...data.updated_fields };
+      renderNetSheet(currentFields);
+    }
+
+    const pills = data.extracted_fields ? data.extracted_fields.map(f => f.label) : [];
+    appendMessage('agent', data.message, pills);
+    conversationHistory.push({ role: 'assistant', content: data.message });
+
+  } catch (err) {
+    removeTyping();
+    showError('Could not reach the assistant. ' + err.message);
+    appendMessage('agent', "I'm having trouble connecting right now. You can still use the form fields on the right to build your net sheet manually.");
+    conversationHistory.push({ role: 'assistant', content: "I'm having trouble connecting right now." });
+  }
+
+  isLoading = false;
+  document.getElementById('sendBtn').disabled = false;
+  document.getElementById('chatInput').focus();
+}
+
+function useSuggestion(el) {
+  document.getElementById('chatInput').value = el.textContent;
+  autoResize(document.getElementById('chatInput'));
+  sendMessage();
+}
+
+function handleKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
+}
+
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+}
+</script>
+</body>
+</html>
