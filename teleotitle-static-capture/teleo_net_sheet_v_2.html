@@ -1,0 +1,1313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Teleo Title — Smart Net Sheet</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f7f7f4;
+      --panel: #ffffff;
+      --panel-2: #f1f1eb;
+      --text: #171714;
+      --muted: #6c6c63;
+      --line: rgba(23,23,20,.10);
+      --line-strong: rgba(23,23,20,.18);
+      --brand: #111111;
+      --gold: #ad7a22;
+      --gold-soft: #fbf4e7;
+      --green: #0d7a5a;
+      --green-soft: #e6f5ef;
+      --red: #ad3c3c;
+      --red-soft: #fdeeee;
+      --blue: #2c65b8;
+      --blue-soft: #ebf2fd;
+      --radius: 14px;
+      --radius-lg: 22px;
+      --shadow: 0 14px 40px rgba(0,0,0,.05);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: linear-gradient(180deg, #fafaf8 0%, var(--bg) 100%);
+      color: var(--text);
+    }
+
+    .shell {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 18px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255,255,255,.7);
+      backdrop-filter: blur(10px);
+      position: sticky;
+      top: 14px;
+      z-index: 30;
+      box-shadow: var(--shadow);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-mark {
+      width: 36px;
+      height: 36px;
+      border-radius: 11px;
+      background: var(--brand);
+      display: grid;
+      place-items: center;
+      color: white;
+      font-weight: 700;
+    }
+
+    .brand h1 {
+      font-size: 16px;
+      margin: 0;
+      font-weight: 700;
+    }
+
+    .brand p {
+      margin: 2px 0 0;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .top-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn, button {
+      font: inherit;
+    }
+
+    .btn {
+      border: 1px solid var(--line-strong);
+      background: white;
+      color: var(--text);
+      border-radius: 12px;
+      padding: 10px 14px;
+      cursor: pointer;
+      transition: .18s ease;
+    }
+
+    .btn:hover { transform: translateY(-1px); }
+    .btn-primary {
+      background: var(--brand);
+      color: white;
+      border-color: var(--brand);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap: 24px;
+      margin: 26px 0;
+    }
+
+    .hero-card, .mini-card, .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+    }
+
+    .hero-card {
+      padding: 28px;
+      min-height: 240px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      background: var(--gold-soft);
+      color: var(--gold);
+      padding: 7px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 18px;
+    }
+
+    .hero-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(34px, 5vw, 56px);
+      line-height: 1.02;
+      margin: 0 0 12px;
+      letter-spacing: -.02em;
+    }
+
+    .hero-copy {
+      font-size: 16px;
+      color: var(--muted);
+      max-width: 720px;
+      margin: 0 0 20px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .mini-card {
+      padding: 16px;
+    }
+
+    .mini-kicker {
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      margin-bottom: 6px;
+    }
+
+    .mini-value {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .mini-copy {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(360px, .9fr);
+      gap: 24px;
+      align-items: start;
+    }
+
+    .panel { overflow: hidden; }
+
+    .chat-head, .sheet-head, .section-head {
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .section-title {
+      margin: 0;
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .section-sub {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .assistant-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--green);
+      background: var(--green-soft);
+      border-radius: 999px;
+      padding: 8px 10px;
+      font-weight: 600;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    .chat-wrap {
+      display: grid;
+      grid-template-rows: auto auto 1fr auto auto;
+      min-height: 880px;
+    }
+
+    .quick-start {
+      padding: 16px 20px 0;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .chip {
+      border: 1px solid var(--line-strong);
+      background: var(--panel-2);
+      color: var(--text);
+      border-radius: 999px;
+      padding: 9px 12px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .chat-messages {
+      padding: 18px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      min-height: 320px;
+      max-height: 520px;
+      overflow: auto;
+    }
+
+    .msg { display: flex; flex-direction: column; gap: 4px; }
+    .msg.user { align-items: flex-end; }
+    .msg.assistant { align-items: flex-start; }
+
+    .msg-label {
+      font-size: 11px;
+      color: var(--muted);
+      padding: 0 4px;
+    }
+
+    .bubble {
+      max-width: 88%;
+      padding: 12px 14px;
+      border-radius: 16px;
+      font-size: 14px;
+      line-height: 1.55;
+      border: 1px solid var(--line);
+      background: white;
+    }
+
+    .user .bubble {
+      background: var(--brand);
+      color: white;
+      border-color: var(--brand);
+    }
+
+    .typing {
+      display: inline-flex;
+      gap: 5px;
+      align-items: center;
+    }
+
+    .typing span {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #7d7d75;
+      animation: bounce 1s infinite ease-in-out;
+    }
+    .typing span:nth-child(2){ animation-delay: .15s; }
+    .typing span:nth-child(3){ animation-delay: .3s; }
+
+    @keyframes bounce {
+      0%, 80%, 100% { transform: translateY(0); opacity: .6; }
+      40% { transform: translateY(-5px); opacity: 1; }
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .fact-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--green-soft);
+      color: var(--green);
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .smart-row {
+      padding: 0 20px 16px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .smart-card {
+      border: 1px solid var(--line);
+      background: var(--panel-2);
+      border-radius: 16px;
+      padding: 12px;
+    }
+
+    .smart-label {
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      margin-bottom: 6px;
+    }
+
+    .smart-card strong {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+
+    .smart-card p {
+      margin: 0;
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    .input-bar {
+      border-top: 1px solid var(--line);
+      padding: 16px 20px 20px;
+    }
+
+    .input-shell {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+    }
+
+    textarea {
+      width: 100%;
+      resize: none;
+      min-height: 60px;
+      max-height: 180px;
+      border: 1px solid var(--line-strong);
+      border-radius: 16px;
+      padding: 14px 16px;
+      font: inherit;
+      font-size: 14px;
+      line-height: 1.45;
+      outline: none;
+      background: white;
+    }
+
+    textarea:focus { border-color: var(--gold); }
+
+    .send {
+      min-width: 132px;
+      border: none;
+      border-radius: 16px;
+      background: var(--brand);
+      color: white;
+      font-weight: 700;
+      cursor: pointer;
+      padding: 0 18px;
+    }
+
+    .send:disabled {
+      opacity: .5;
+      cursor: not-allowed;
+    }
+
+    .sheet {
+      position: sticky;
+      top: 96px;
+    }
+
+    .sheet-summary {
+      padding: 20px;
+      background: linear-gradient(135deg, #111111 0%, #1c1c18 100%);
+      color: white;
+    }
+
+    .summary-kicker {
+      color: rgba(255,255,255,.58);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      margin-bottom: 8px;
+    }
+
+    .summary-title {
+      font-size: 18px;
+      margin: 0 0 10px;
+      font-weight: 600;
+    }
+
+    .summary-net {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(42px, 5vw, 56px);
+      line-height: 1;
+      margin: 0;
+      letter-spacing: -.02em;
+    }
+
+    .summary-note {
+      margin-top: 8px;
+      color: rgba(255,255,255,.68);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .confidence {
+      margin-top: 16px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .meter-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      color: rgba(255,255,255,.82);
+    }
+
+    .meter {
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.12);
+      overflow: hidden;
+    }
+
+    .meter > span {
+      display: block;
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #c8a564, #f4deac);
+      transition: width .25s ease;
+    }
+
+    .assumption-box, .missing-box, .manual-box, .breakdown, .timeline-box {
+      padding: 18px 20px;
+      border-top: 1px solid var(--line);
+    }
+
+    .stack {
+      display: grid;
+      gap: 12px;
+    }
+
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      font-size: 14px;
+      padding: 8px 0;
+      border-bottom: 1px dashed rgba(23,23,20,.08);
+    }
+
+    .info-row:last-child { border-bottom: none; }
+    .info-row span:first-child { color: var(--muted); }
+    .info-row strong { font-weight: 700; }
+
+    .list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .badge {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 8px 10px;
+      border-radius: 999px;
+      background: var(--panel-2);
+      border: 1px solid var(--line);
+    }
+
+    .badge.warn {
+      background: var(--gold-soft);
+      color: var(--gold);
+    }
+
+    .badge.miss {
+      background: var(--red-soft);
+      color: var(--red);
+    }
+
+    .manual-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .field {
+      display: grid;
+      gap: 6px;
+    }
+
+    .field label {
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .field input, .field select {
+      width: 100%;
+      border: 1px solid var(--line-strong);
+      border-radius: 12px;
+      padding: 11px 12px;
+      font: inherit;
+      background: white;
+    }
+
+    .totals-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .total-card {
+      border: 1px solid var(--line);
+      background: var(--panel-2);
+      border-radius: 16px;
+      padding: 14px;
+    }
+
+    .total-card small {
+      display: block;
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      margin-bottom: 6px;
+    }
+
+    .total-card strong {
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    .bar {
+      height: 12px;
+      background: var(--panel-2);
+      border-radius: 999px;
+      overflow: hidden;
+      display: flex;
+      margin-bottom: 12px;
+    }
+
+    .seg { height: 100%; }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 16px;
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    .legend span {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .legend i {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .line-item {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 9px 0;
+      font-size: 14px;
+      border-bottom: 1px solid rgba(23,23,20,.06);
+    }
+
+    .line-item:last-child { border-bottom: none; }
+    .line-item span:first-child { color: var(--muted); }
+    .value-red { color: var(--red); font-weight: 700; }
+    .value-green { color: var(--green); font-weight: 700; }
+
+    .footer-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+
+    .tiny {
+      font-size: 11px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .timeline-box ul {
+      padding-left: 18px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .empty-note {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 1120px) {
+      .hero, .layout { grid-template-columns: 1fr; }
+      .sheet { position: static; }
+    }
+
+    @media (max-width: 760px) {
+      .shell { padding: 14px; }
+      .hero-card, .mini-card, .panel { border-radius: 18px; }
+      .hero-grid, .smart-row, .manual-grid, .totals-grid { grid-template-columns: 1fr; }
+      .topbar { padding: 12px 14px; }
+      .input-shell { grid-template-columns: 1fr; }
+      .send { min-height: 48px; }
+    }
+
+    @media print {
+      .topbar, .hero, .chat-wrap, .manual-box, .footer-actions { display: none !important; }
+      .layout { grid-template-columns: 1fr; }
+      .sheet-summary { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <div class="topbar">
+      <div class="brand">
+        <div class="brand-mark">T</div>
+        <div>
+          <h1>Teleo Title</h1>
+          <p>AI-guided net sheet workspace</p>
+        </div>
+      </div>
+      <div class="top-actions">
+        <button class="btn" onclick="resetAll()">New deal</button>
+        <button class="btn" onclick="window.print()">Print / PDF</button>
+        <button class="btn btn-primary" id="orderBtnTop" disabled>Open order</button>
+      </div>
+    </div>
+
+    <section class="hero">
+      <div class="hero-card">
+        <div class="hero-badge">AI agent assisted · faster intake · fewer missed details</div>
+        <h2 class="hero-title">A better net sheet experience for agents, lenders, and clients.</h2>
+        <p class="hero-copy">Instead of making agents fill out a rigid form first, this version lets them describe the deal naturally, shows what the assistant captured, highlights assumptions, and keeps a transparent manual override area for anything that needs to be tightened up.</p>
+        <div class="hero-grid">
+          <div class="mini-card">
+            <div class="mini-kicker">Less friction</div>
+            <div class="mini-value">Chat first</div>
+            <div class="mini-copy">Start with a plain-English deal summary instead of a blank calculator.</div>
+          </div>
+          <div class="mini-card">
+            <div class="mini-kicker">More trust</div>
+            <div class="mini-value">Visible assumptions</div>
+            <div class="mini-copy">The assistant shows what it inferred so the agent can confirm or correct it quickly.</div>
+          </div>
+          <div class="mini-card">
+            <div class="mini-kicker">Faster close</div>
+            <div class="mini-value">Ready to order</div>
+            <div class="mini-copy">Once the estimate is solid, the file can move directly into order intake.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="section-head">
+          <div>
+            <h3 class="section-title">Suggested flows</h3>
+            <p class="section-sub">These are the most common ways agents think about a deal.</p>
+          </div>
+        </div>
+        <div style="padding: 20px; display:grid; gap:12px;">
+          <div class="smart-card">
+            <div class="smart-label">Seller side</div>
+            <strong>“$585k sale in Georgetown, seller owes $312k, 3% each side, no HOA.”</strong>
+            <p>Best for quick listing-side estimates and seller net conversations.</p>
+          </div>
+          <div class="smart-card">
+            <div class="smart-label">Buyer side</div>
+            <strong>“Buyer at $465k, 10% down, conventional loan, Williamson County.”</strong>
+            <p>Good for cash-to-close estimates and buyer consultation calls.</p>
+          </div>
+          <div class="smart-card">
+            <div class="smart-label">Refi / edge case</div>
+            <strong>“Refi at $410k loan amount, no commissions, Travis County, survey already on file.”</strong>
+            <p>Handles smaller specialty flows without forcing irrelevant questions.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="layout">
+      <div class="panel chat-wrap">
+        <div class="chat-head">
+          <div>
+            <h3 class="section-title">Deal conversation</h3>
+            <p class="section-sub">The assistant extracts the details and asks only the next best questions.</p>
+          </div>
+          <div class="assistant-status"><span class="dot"></span> Assistant ready</div>
+        </div>
+
+        <div class="quick-start">
+          <button class="chip" onclick="seedPrompt('$485k sale in Georgetown, seller owes $310k, 3% each side, has HOA')">Seller sample</button>
+          <button class="chip" onclick="seedPrompt('Buyer at $550k purchase, 20% down, conventional, Williamson County, HOA neighborhood')">Buyer sample</button>
+          <button class="chip" onclick="seedPrompt('Commercial sale at $1.2M in Travis County, no HOA, existing payoff $420k')">Commercial sample</button>
+          <button class="chip" onclick="seedPrompt('Refi with $380k loan amount, Travis County, no commissions')">Refi sample</button>
+        </div>
+
+        <div class="chat-messages" id="chatMessages">
+          <div class="msg assistant">
+            <div class="msg-label">Teleo Title Assistant</div>
+            <div class="bubble">
+              Hi — tell me the deal in plain language and I’ll build the net sheet as we go. I can estimate seller net proceeds, buyer cash to close, and simple refinance costs. Start with the sale price or loan amount and anything else you already know.
+            </div>
+          </div>
+        </div>
+
+        <div class="smart-row">
+          <div class="smart-card">
+            <div class="smart-label">Assistant strategy</div>
+            <strong>Ask less, infer more</strong>
+            <p>Capture what can be inferred, then ask only for the highest-value missing items.</p>
+          </div>
+          <div class="smart-card">
+            <div class="smart-label">Manual control</div>
+            <strong>Override anything</strong>
+            <p>Every important field can still be edited directly without restarting the conversation.</p>
+          </div>
+          <div class="smart-card">
+            <div class="smart-label">Transparency</div>
+            <strong>Show the math</strong>
+            <p>Breakdowns, assumptions, and missing data stay visible while the estimate updates live.</p>
+          </div>
+        </div>
+
+        <div class="input-bar">
+          <div class="input-shell">
+            <textarea id="chatInput" placeholder="Example: $635k sale in Georgetown, seller owes $285k, 3% each side, no HOA, survey available" oninput="grow(this)" onkeydown="handleKey(event)"></textarea>
+            <button class="send" id="sendBtn" onclick="sendMessage()">Update sheet</button>
+          </div>
+          <div class="tiny" style="margin-top:10px;">Tip: the assistant should return structured fields like sale price, commissions, county, payoff, loan amount, HOA, survey, concessions, and transaction mode.</div>
+        </div>
+      </div>
+
+      <div class="panel sheet">
+        <div class="sheet-head">
+          <div>
+            <h3 class="section-title">Live net sheet</h3>
+            <p class="section-sub">Estimate updates as the assistant or user fills in fields.</p>
+          </div>
+          <button class="btn" onclick="toggleMode()" id="modeBtn">Mode: Seller</button>
+        </div>
+
+        <div class="sheet-summary">
+          <div class="summary-kicker" id="summaryLabel">Estimated net proceeds</div>
+          <h4 class="summary-title" id="summaryTitle">Waiting for deal details</h4>
+          <p class="summary-net" id="summaryNet">—</p>
+          <div class="summary-note" id="summaryNote">Start with a deal description to generate the first estimate.</div>
+          <div class="confidence">
+            <div class="meter-row">
+              <span>Estimate completeness</span>
+              <strong id="confidencePct">0%</strong>
+            </div>
+            <div class="meter"><span id="confidenceFill"></span></div>
+          </div>
+        </div>
+
+        <div class="assumption-box">
+          <div class="section-title" style="margin-bottom:10px;">Captured details</div>
+          <div class="stack" id="capturedRows">
+            <div class="empty-note">No deal fields captured yet.</div>
+          </div>
+        </div>
+
+        <div class="missing-box">
+          <div class="section-title" style="margin-bottom:10px;">Missing or suggested follow-ups</div>
+          <div class="list" id="missingBadges">
+            <span class="badge miss">Sale price</span>
+            <span class="badge miss">County</span>
+            <span class="badge miss">Commissions or loan details</span>
+          </div>
+        </div>
+
+        <div class="timeline-box">
+          <div class="section-title" style="margin-bottom:10px;">Why this is better</div>
+          <ul>
+            <li>AI handles the first pass so the agent is not staring at empty inputs.</li>
+            <li>The page keeps assumptions visible instead of hiding them in the assistant response.</li>
+            <li>Manual edits and live math sit side by side, which is safer for real transactions.</li>
+          </ul>
+        </div>
+
+        <div class="manual-box">
+          <div class="section-title" style="margin-bottom:12px;">Manual override</div>
+          <div class="manual-grid">
+            <div class="field"><label>Sale price</label><input id="f_sale_price" type="number" placeholder="485000" oninput="applyManual()"></div>
+            <div class="field"><label>Loan payoff</label><input id="f_loan_payoff" type="number" placeholder="310000" oninput="applyManual()"></div>
+            <div class="field"><label>Loan amount</label><input id="f_loan_amount" type="number" placeholder="440000" oninput="applyManual()"></div>
+            <div class="field"><label>County</label>
+              <select id="f_county" onchange="applyManual()">
+                <option value="">Select county</option>
+                <option value="williamson">Williamson</option>
+                <option value="travis">Travis</option>
+                <option value="hays">Hays</option>
+                <option value="bastrop">Bastrop</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            <div class="field"><label>Listing commission %</label><input id="f_list_commission_pct" type="number" step="0.1" placeholder="3" oninput="applyManual()"></div>
+            <div class="field"><label>Buyer commission %</label><input id="f_buyer_commission_pct" type="number" step="0.1" placeholder="3" oninput="applyManual()"></div>
+            <div class="field"><label>Loan type</label>
+              <select id="f_loan_type" onchange="applyManual()">
+                <option value="">Select loan type</option>
+                <option value="conventional">Conventional</option>
+                <option value="fha">FHA</option>
+                <option value="va">VA</option>
+                <option value="cash">Cash</option>
+              </select>
+            </div>
+            <div class="field"><label>Transaction type</label>
+              <select id="f_transaction_type" onchange="applyManual()">
+                <option value="">Select type</option>
+                <option value="residential">Residential</option>
+                <option value="commercial">Commercial</option>
+                <option value="land">Land</option>
+                <option value="refi">Refi</option>
+              </select>
+            </div>
+            <div class="field"><label>Concessions</label><input id="f_concessions" type="number" placeholder="5000" oninput="applyManual()"></div>
+            <div class="field"><label>HOA</label>
+              <select id="f_has_hoa" onchange="applyManual()">
+                <option value="">Unknown</option>
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+              </select>
+            </div>
+            <div class="field"><label>Survey</label>
+              <select id="f_has_survey" onchange="applyManual()">
+                <option value="">Unknown</option>
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+              </select>
+            </div>
+            <div class="field"><label>Home warranty</label>
+              <select id="f_home_warranty" onchange="applyManual()">
+                <option value="">Unknown</option>
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="breakdown">
+          <div class="section-title" style="margin-bottom:12px;">Estimate breakdown</div>
+          <div class="totals-grid">
+            <div class="total-card">
+              <small>Total credits</small>
+              <strong id="totalCredits">$0</strong>
+            </div>
+            <div class="total-card">
+              <small>Total debits</small>
+              <strong id="totalDebits">$0</strong>
+            </div>
+          </div>
+          <div class="bar" id="bar"></div>
+          <div class="legend" id="legend"></div>
+          <div id="lineItems"><div class="empty-note">No estimate yet.</div></div>
+          <div class="footer-actions">
+            <button class="btn btn-primary" id="orderBtnBottom" disabled>Open order with Teleo</button>
+            <button class="btn" onclick="window.print()">Print / save as PDF</button>
+          </div>
+          <div class="tiny" style="margin-top:12px;">Estimate only. Texas promulgated rates and fee assumptions should be verified before opening and funding the order.</div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const API_ENDPOINT = '/api/chat';
+    const fmtMoney = (n) => '$' + Math.round(Math.abs(Number(n) || 0)).toLocaleString();
+    const fmtPct = (n) => `${Number(n).toFixed(1).replace('.0','')}%`;
+
+    let currentFields = { transaction_mode: 'seller' };
+    let conversationHistory = [];
+    let loading = false;
+
+    const FIELD_LABELS = {
+      sale_price: 'Sale price',
+      loan_payoff: 'Loan payoff',
+      loan_amount: 'Loan amount',
+      county: 'County',
+      list_commission_pct: 'Listing commission',
+      buyer_commission_pct: 'Buyer commission',
+      loan_type: 'Loan type',
+      transaction_type: 'Transaction type',
+      transaction_mode: 'Mode',
+      concessions: 'Concessions',
+      has_hoa: 'HOA',
+      has_survey: 'Survey',
+      home_warranty: 'Home warranty',
+      owner_policy: 'Owner policy',
+      lender_policy: 'Lender policy'
+    };
+
+    function txRate(price) {
+      price = Number(price) || 0;
+      if (price <= 100000) return price * 0.0087;
+      if (price <= 1000000) return 100000 * 0.0087 + (price - 100000) * 0.00535;
+      return 100000 * 0.0087 + 900000 * 0.00535 + (price - 1000000) * 0.00302;
+    }
+
+    function lenderRate(loan) {
+      loan = Number(loan) || 0;
+      if (loan <= 100000) return loan * 0.0080;
+      if (loan <= 1000000) return 100000 * 0.0080 + (loan - 100000) * 0.00483;
+      return 100000 * 0.0080 + 900000 * 0.00483 + (loan - 1000000) * 0.00261;
+    }
+
+    function calcNetSheet(fields) {
+      const mode = fields.transaction_mode || 'seller';
+      const price = Number(fields.sale_price) || 0;
+      const payoff = Number(fields.loan_payoff) || 0;
+      const loanAmt = Number(fields.loan_amount) || 0;
+      const concessions = Number(fields.concessions) || 0;
+      const listPct = (Number(fields.list_commission_pct) || 0) / 100;
+      const buyerPct = (Number(fields.buyer_commission_pct) || 0) / 100;
+      const loanType = fields.loan_type || 'conventional';
+      const txType = fields.transaction_type || 'residential';
+
+      let credits = [];
+      let debits = [];
+      let assumptions = [];
+
+      if (mode === 'seller') {
+        if (price) credits.push({ label: 'Sale price', amt: price, type: 'credit' });
+        if (listPct) debits.push({ label: `Listing commission (${fmtPct(listPct * 100)})`, amt: price * listPct, type: 'commission' });
+        if (buyerPct) debits.push({ label: `Buyer agent commission (${fmtPct(buyerPct * 100)})`, amt: price * buyerPct, type: 'commission' });
+        if (payoff) debits.push({ label: 'Existing loan payoff', amt: payoff, type: 'loan' });
+        if (fields.owner_policy !== false && price) debits.push({ label: "Owner's title policy", amt: txRate(price), type: 'title' });
+        if (price) debits.push({ label: 'Teleo closing fee', amt: 595, type: 'title' });
+        if (price) debits.push({ label: 'Recording / misc. estimate', amt: 150, type: 'title' });
+        if (txType === 'commercial') debits.push({ label: 'Commercial endorsements', amt: 250, type: 'other' });
+        if (fields.has_survey === true) debits.push({ label: 'Survey', amt: 650, type: 'other' });
+        if (fields.has_hoa === true) debits.push({ label: 'HOA transfer / resale estimate', amt: 350, type: 'other' });
+        if (fields.home_warranty === true) debits.push({ label: 'Home warranty', amt: 575, type: 'other' });
+        if (concessions) debits.push({ label: 'Seller concessions / credits', amt: concessions, type: 'other' });
+        if (price) debits.push({ label: 'Transfer tax estimate', amt: price * 0.001, type: 'other' });
+
+        if (!fields.county) assumptions.push('County not confirmed yet');
+        if (!fields.has_hoa && fields.has_hoa !== false) assumptions.push('HOA status still unknown');
+      } else {
+        if (price) credits.push({ label: 'Purchase price', amt: price, type: 'credit' });
+        if (concessions) credits.push({ label: 'Seller concessions', amt: concessions, type: 'credit' });
+        if (loanAmt) credits.push({ label: 'Loan amount', amt: loanAmt, type: 'credit' });
+        if (loanAmt && fields.lender_policy !== false && loanType !== 'cash') debits.push({ label: "Lender's title policy", amt: lenderRate(loanAmt), type: 'title' });
+        if (price) debits.push({ label: 'Teleo closing fee', amt: 595, type: 'title' });
+        if (price) debits.push({ label: 'Recording / endorsements', amt: 250, type: 'title' });
+        if (price) debits.push({ label: 'Title search & exam', amt: 195, type: 'title' });
+        if (loanAmt && loanType !== 'cash') {
+          debits.push({ label: 'Origination fee estimate (1%)', amt: loanAmt * 0.01, type: 'loan' });
+          debits.push({ label: 'Appraisal estimate', amt: 600, type: 'loan' });
+          debits.push({ label: 'Prepaid interest estimate', amt: loanAmt * 0.07 / 365 * 15, type: 'loan' });
+          debits.push({ label: 'Initial escrow estimate', amt: price * 0.022 / 12 * 3, type: 'loan' });
+          if (loanType === 'fha') debits.push({ label: 'FHA upfront MIP', amt: loanAmt * 0.0175, type: 'loan' });
+        }
+        if (fields.has_survey === true) debits.push({ label: 'Survey', amt: 650, type: 'other' });
+        if (fields.has_hoa === true) debits.push({ label: 'HOA dues / proration estimate', amt: 300, type: 'other' });
+
+        if (!fields.loan_amount && loanType !== 'cash') assumptions.push('Loan amount still missing');
+        if (!fields.loan_type) assumptions.push('Loan type not confirmed yet');
+      }
+
+      const totalCredits = credits.reduce((sum, item) => sum + item.amt, 0);
+      const totalDebits = debits.reduce((sum, item) => sum + item.amt, 0);
+      const net = totalCredits - totalDebits;
+      return { credits, debits, totalCredits, totalDebits, net, assumptions };
+    }
+
+    function getMissingFields(fields) {
+      const mode = fields.transaction_mode || 'seller';
+      const core = ['sale_price', 'county'];
+      const sellerNeeds = ['loan_payoff', 'list_commission_pct', 'buyer_commission_pct'];
+      const buyerNeeds = ['loan_type'];
+      const buyerNeedsExtra = fields.loan_type === 'cash' ? [] : ['loan_amount'];
+      return [...core, ...(mode === 'seller' ? sellerNeeds : [...buyerNeeds, ...buyerNeedsExtra])]
+        .filter(key => fields[key] === undefined || fields[key] === null || fields[key] === '');
+    }
+
+    function completeness(fields) {
+      const missing = getMissingFields(fields);
+      const baseCount = (fields.transaction_mode || 'seller') === 'seller' ? 5 : 4;
+      return Math.max(0, Math.min(100, Math.round(((baseCount - missing.length) / baseCount) * 100)));
+    }
+
+    function renderCaptured(fields) {
+      const wrap = document.getElementById('capturedRows');
+      const entries = Object.entries(fields).filter(([_, value]) => value !== '' && value !== undefined && value !== null);
+      if (!entries.length) {
+        wrap.innerHTML = '<div class="empty-note">No deal fields captured yet.</div>';
+        return;
+      }
+
+      wrap.innerHTML = entries.map(([key, value]) => {
+        let display = value;
+        if (['sale_price', 'loan_payoff', 'loan_amount', 'concessions'].includes(key)) display = fmtMoney(value);
+        if (['list_commission_pct', 'buyer_commission_pct'].includes(key)) display = fmtPct(value);
+        if (typeof value === 'boolean') display = value ? 'Yes' : 'No';
+        if (key === 'transaction_mode') display = value === 'seller' ? 'Seller net' : 'Buyer cash to close';
+        return `<div class="info-row"><span>${FIELD_LABELS[key] || key}</span><strong>${display}</strong></div>`;
+      }).join('');
+    }
+
+    function renderMissing(fields, aiMissing = []) {
+      const wrap = document.getElementById('missingBadges');
+      const combined = [...new Set([...getMissingFields(fields), ...aiMissing])];
+      if (!combined.length) {
+        wrap.innerHTML = '<span class="badge">Estimate looks fairly complete</span>';
+        return;
+      }
+      wrap.innerHTML = combined.map(key => `<span class="badge miss">${FIELD_LABELS[key] || key}</span>`).join('');
+    }
+
+    function renderManualFields(fields) {
+      const ids = ['sale_price','loan_payoff','loan_amount','county','list_commission_pct','buyer_commission_pct','loan_type','transaction_type','concessions'];
+      ids.forEach(key => {
+        const el = document.getElementById(`f_${key}`);
+        if (!el) return;
+        el.value = fields[key] ?? '';
+      });
+      ['has_hoa','has_survey','home_warranty'].forEach(key => {
+        const el = document.getElementById(`f_${key}`);
+        if (!el) return;
+        const v = fields[key];
+        el.value = v === true ? 'true' : v === false ? 'false' : '';
+      });
+    }
+
+    function renderBreakdown(fields) {
+      const { credits, debits, totalCredits, totalDebits, net, assumptions } = calcNetSheet(fields);
+      const mode = fields.transaction_mode || 'seller';
+      const completePct = completeness(fields);
+
+      document.getElementById('summaryLabel').textContent = mode === 'seller' ? 'Estimated net proceeds' : 'Estimated cash to close';
+      document.getElementById('summaryTitle').textContent = mode === 'seller' ? 'Seller-side estimate' : 'Buyer-side estimate';
+      document.getElementById('summaryNet').textContent = fields.sale_price || fields.loan_amount ? fmtMoney(net) : '—';
+      document.getElementById('summaryNote').textContent = assumptions.length
+        ? assumptions.join(' · ')
+        : (fields.sale_price || fields.loan_amount ? 'Estimate generated from captured deal details.' : 'Start with a deal description to generate the first estimate.');
+
+      document.getElementById('confidencePct').textContent = `${completePct}%`;
+      document.getElementById('confidenceFill').style.width = `${completePct}%`;
+      document.getElementById('totalCredits').textContent = fmtMoney(totalCredits);
+      document.getElementById('totalDebits').textContent = fmtMoney(totalDebits);
+
+      const comm = debits.filter(x => x.type === 'commission').reduce((s, x) => s + x.amt, 0);
+      const title = debits.filter(x => x.type === 'title').reduce((s, x) => s + x.amt, 0);
+      const loan = debits.filter(x => x.type === 'loan').reduce((s, x) => s + x.amt, 0);
+      const other = debits.filter(x => x.type === 'other').reduce((s, x) => s + x.amt, 0);
+      const totalDeb = totalDebits || 1;
+      const segments = [
+        { label: 'Commissions', value: comm, color: '#d97941' },
+        { label: 'Loan-related', value: loan, color: '#3c78c9' },
+        { label: 'Title & closing', value: title, color: '#12926c' },
+        { label: 'Other', value: other, color: '#8a877d' }
+      ].filter(x => x.value > 0);
+
+      document.getElementById('bar').innerHTML = segments.map(seg => `<div class="seg" style="width:${(seg.value / totalDeb * 100).toFixed(2)}%; background:${seg.color}"></div>`).join('');
+      document.getElementById('legend').innerHTML = segments.map(seg => `<span><i style="background:${seg.color}"></i>${seg.label} ${fmtMoney(seg.value)}</span>`).join('');
+
+      const lineWrap = document.getElementById('lineItems');
+      const allItems = [
+        ...credits.map(i => ({ ...i, cls: 'value-green' })),
+        ...debits.map(i => ({ ...i, cls: 'value-red' }))
+      ];
+      if (!allItems.length) {
+        lineWrap.innerHTML = '<div class="empty-note">No estimate yet.</div>';
+      } else {
+        lineWrap.innerHTML = allItems.map(i => `<div class="line-item"><span>${i.label}</span><strong class="${i.cls}">${fmtMoney(i.amt)}</strong></div>`).join('') +
+          `<div class="line-item" style="margin-top:8px; border-top:1px solid var(--line-strong); padding-top:14px;"><span style="color:var(--text); font-weight:700;">${mode === 'seller' ? 'Estimated net proceeds' : 'Estimated cash to close'}</span><strong class="${net >= 0 ? 'value-green' : 'value-red'}">${fmtMoney(net)}</strong></div>`;
+      }
+
+      const canOrder = !!(fields.sale_price || fields.loan_amount);
+      document.getElementById('orderBtnTop').disabled = !canOrder;
+      document.getElementById('orderBtnBottom').disabled = !canOrder;
+      document.getElementById('modeBtn').textContent = `Mode: ${mode === 'seller' ? 'Seller' : 'Buyer'}`;
+    }
+
+    function renderAll(aiMissing = []) {
+      renderCaptured(currentFields);
+      renderMissing(currentFields, aiMissing);
+      renderManualFields(currentFields);
+      renderBreakdown(currentFields);
+    }
+
+    function appendMessage(role, text, pills = []) {
+      const box = document.getElementById('chatMessages');
+      const div = document.createElement('div');
+      div.className = `msg ${role}`;
+      div.innerHTML = `
+        <div class="msg-label">${role === 'assistant' ? 'Teleo Title Assistant' : 'You'}</div>
+        <div class="bubble">
+          ${text}
+          ${pills.length ? `<div class="pill-row">${pills.map(p => `<span class="fact-pill">${p}</span>`).join('')}</div>` : ''}
+        </div>
+      `;
+      box.appendChild(div);
+      box.scrollTop = box.scrollHeight;
+    }
+
+    function showTyping() {
+      const box = document.getElementById('chatMessages');
+      const div = document.createElement('div');
+      div.id = 'typing';
+      div.className = 'msg assistant';
+      div.innerHTML = `<div class="msg-label">Teleo Title Assistant</div><div class="bubble"><div class="typing"><span></span><span></span><span></span></div></div>`;
+      box.appendChild(div);
+      box.scrollTop = box.scrollHeight;
+    }
+
+    function hideTyping() {
+      document.getElementById('typing')?.remove();
+    }
+
+    function grow(el) {
+      el.style.height = 'auto';
+      el.style.height = Math.min(el.scrollHeight, 180) + 'px';
+    }
+
+    function handleKey(e) {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+      }
+    }
+
+    function seedPrompt(text) {
+      const input = document.getElementById('chatInput');
+      input.value = text;
+      grow(input);
+      sendMessage();
+    }
+
+    function parseBool(val) {
+      if (val === 'true') return true;
+      if (val === 'false') return false;
+      return undefined;
+    }
+
+    function applyManual() {
+      const readNumber = (id) => {
+        const v = document.getElementById(id).value;
+        return v === '' ? undefined : Number(v);
+      };
+      const readValue = (id) => {
+        const v = document.getElementById(id).value;
+        return v === '' ? undefined : v;
+      };
+
+      currentFields = {
+        ...currentFields,
+        sale_price: readNumber('f_sale_price'),
+        loan_payoff: readNumber('f_loan_payoff'),
+        loan_amount: readNumber('f_loan_amount'),
+        county: readValue('f_county'),
+        list_commission_pct: readNumber('f_list_commission_pct'),
+        buyer_commission_pct: readNumber('f_buyer_commission_pct'),
+        loan_type: readValue('f_loan_type'),
+        transaction_type: readValue('f_transaction_type'),
+        concessions: readNumber('f_concessions'),
+        has_hoa: parseBool(document.getElementById('f_has_hoa').value),
+        has_survey: parseBool(document.getElementById('f_has_survey').value),
+        home_warranty: parseBool(document.getElementById('f_home_warranty').value)
+      };
+      Object.keys(currentFields).forEach(key => currentFields[key] === undefined && delete currentFields[key]);
+      renderAll();
+    }
+
+    function toggleMode() {
+      currentFields.transaction_mode = (currentFields.transaction_mode || 'seller') === 'seller' ? 'buyer' : 'seller';
+      renderAll();
+    }
+
+    function resetAll() {
+      currentFields = { transaction_mode: 'seller' };
+      conversationHistory = [];
+      document.getElementById('chatMessages').innerHTML = `
+        <div class="msg assistant">
+          <div class="msg-label">Teleo Title Assistant</div>
+          <div class="bubble">Hi — tell me the deal in plain language and I’ll build the net sheet as we go. I can estimate seller net proceeds, buyer cash to close, and simple refinance costs. Start with the sale price or loan amount and anything else you already know.</div>
+        </div>`;
+      document.getElementById('chatInput').value = '';
+      grow(document.getElementById('chatInput'));
+      renderAll();
+    }
+
+    async function sendMessage() {
+      const input = document.getElementById('chatInput');
+      const text = input.value.trim();
+      if (!text || loading) return;
+
+      appendMessage('user', text);
+      conversationHistory.push({ role: 'user', content: text });
+      input.value = '';
+      grow(input);
+      loading = true;
+      document.getElementById('sendBtn').disabled = true;
+      showTyping();
+
+      try {
+        const res = await fetch(API_ENDPOINT, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            messages: conversationHistory,
+            current_fields: currentFields
+          })
+        });
+
+        hideTyping();
+        if (!res.ok) throw new Error(`Assistant request failed (${res.status})`);
+        const data = await res.json();
+
+        if (data.updated_fields) currentFields = { ...currentFields, ...data.updated_fields };
+        if (!currentFields.transaction_mode) currentFields.transaction_mode = 'seller';
+
+        const pills = Array.isArray(data.extracted_fields) ? data.extracted_fields.map(f => f.label) : [];
+        appendMessage('assistant', data.message || 'I updated the estimate.', pills);
+        conversationHistory.push({ role: 'assistant', content: data.message || 'I updated the estimate.' });
+        renderAll(Array.isArray(data.missing_fields) ? data.missing_fields : []);
+      } catch (err) {
+        hideTyping();
+        appendMessage('assistant', 'I could not reach the AI endpoint just now, but you can still use the manual override section to finish the estimate.');
+        renderAll();
+      } finally {
+        loading = false;
+        document.getElementById('sendBtn').disabled = false;
+      }
+    }
+
+    renderAll();
+  </script>
+</body>
+</html>
