@@ -3,737 +3,493 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Teleo Net Sheet v3 Mockup</title>
+  <title>Teleo Net Sheet v3 - Close Match</title>
   <style>
-    :root {
-      --bg: #f6f8fb;
-      --panel: #ffffff;
-      --line: #e7ecf3;
-      --text: #142033;
-      --muted: #62708a;
-      --brand: #173f6d;
-      --brand-2: #245a94;
-      --accent: #0f766e;
-      --accent-soft: #e7f7f4;
-      --shadow: 0 10px 30px rgba(20, 32, 51, 0.08);
-      --radius: 16px;
+    :root{
+      --bg:#f6f7f8;
+      --card:#ffffff;
+      --line:#dfe5ea;
+      --text:#1d2430;
+      --muted:#718096;
+      --green:#3f735f;
+      --green-dark:#355f4f;
+      --green-soft:#eef6f2;
     }
-
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-      background: linear-gradient(180deg, #f8fafc 0%, #f4f7fb 100%);
-      color: var(--text);
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background:var(--bg);
+      color:var(--text);
     }
-
-    .topbar {
-      background: linear-gradient(135deg, var(--brand) 0%, var(--brand-2) 100%);
-      color: white;
-      padding: 18px 28px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      box-shadow: 0 8px 24px rgba(23, 63, 109, 0.22);
+    .topbar{
+      height:36px;
+      background:#fff;
+      border-bottom:1px solid #eceff2;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:0 18px;
     }
-
-    .brand-wrap {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
+    .logo{
+      font-size:18px;
+      font-weight:700;
+      color:#22312f;
     }
-
-    .brand {
-      font-size: 24px;
-      font-weight: 800;
-      letter-spacing: 0.2px;
+    .nav{
+      display:flex;
+      gap:26px;
+      font-size:11px;
+      color:#2f3640;
+      font-weight:600;
     }
-
-    .subbrand {
-      font-size: 13px;
-      opacity: 0.9;
+    .wrap{
+      max-width:740px;
+      margin:24px auto 40px;
+      padding:0 10px;
     }
-
-    .top-actions {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
+    h1{
+      margin:0 0 8px;
+      font-size:28px;
+      line-height:1.15;
+      font-weight:800;
     }
-
-    .btn {
-      border: 0;
-      border-radius: 999px;
-      padding: 11px 16px;
-      font-size: 14px;
-      font-weight: 700;
-      cursor: pointer;
+    .subtitle{
+      color:#7c8ba0;
+      font-size:13px;
+      margin-bottom:22px;
+      max-width:760px;
     }
-
-    .btn-light {
-      background: rgba(255,255,255,0.14);
-      color: white;
-      border: 1px solid rgba(255,255,255,0.16);
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr 345px;
+      gap:14px;
+      align-items:start;
     }
-
-    .btn-accent {
-      background: white;
-      color: var(--brand);
+    .card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:10px;
+      box-shadow:0 1px 0 rgba(10,10,10,.02);
     }
-
-    .shell {
-      max-width: 1460px;
-      margin: 0 auto;
-      padding: 24px;
+    .form-card{
+      padding:14px;
     }
-
-    .hero-row {
-      display: grid;
-      grid-template-columns: 1.4fr 1fr;
-      gap: 18px;
-      margin-bottom: 18px;
+    .section{
+      border:1px solid #edf1f4;
+      border-left:0;
+      border-right:0;
+      padding:14px 0;
     }
-
-    .hero-card, .summary-card, .panel, .drawer {
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
+    .section:first-of-type{
+      padding-top:0;
+      border-top:0;
     }
-
-    .hero-card {
-      padding: 22px 24px;
+    .section:last-of-type{
+      padding-bottom:0;
+      border-bottom:0;
     }
-
-    .summary-card {
-      padding: 22px 24px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      min-height: 148px;
+    .section-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      margin-bottom:12px;
+      font-size:12px;
+      font-weight:700;
     }
-
-    .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      color: var(--accent);
-      background: var(--accent-soft);
-      border-radius: 999px;
-      padding: 8px 12px;
-      font-size: 12px;
-      font-weight: 800;
-      letter-spacing: 0.25px;
-      text-transform: uppercase;
+    .section-head .left{
+      display:flex;
+      align-items:center;
+      gap:8px;
     }
-
-    h1 {
-      margin: 14px 0 8px;
-      font-size: 32px;
-      line-height: 1.08;
+    .icon{
+      font-size:12px;
+      color:#4b5563;
     }
-
-    .hero-copy {
-      margin: 0;
-      color: var(--muted);
-      font-size: 15px;
-      line-height: 1.6;
-      max-width: 840px;
+    .import-btn{
+      border:1px solid #4d7b68;
+      color:#fff;
+      background:var(--green);
+      border-radius:4px;
+      padding:6px 10px;
+      font-size:11px;
+      font-weight:700;
     }
-
-    .summary-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-      margin-top: 14px;
+    .field{
+      margin-bottom:12px;
     }
-
-    .metric {
-      background: #f8fafc;
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      padding: 14px;
+    .field:last-child{margin-bottom:0}
+    .label{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      margin-bottom:6px;
+      font-size:11px;
+      font-weight:700;
+      color:#232b37;
     }
-
-    .metric-label {
-      color: var(--muted);
-      font-size: 12px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.25px;
-      margin-bottom: 6px;
+    .assist-link{
+      font-size:10px;
+      font-weight:700;
+      color:var(--green);
+      cursor:pointer;
+      background:var(--green-soft);
+      border:1px solid #cfe1d8;
+      padding:2px 6px;
+      border-radius:999px;
     }
-
-    .metric-value {
-      font-size: 22px;
-      font-weight: 800;
+    input, select{
+      width:100%;
+      height:32px;
+      border:1px solid #dde3e8;
+      border-radius:3px;
+      padding:0 10px;
+      font-size:12px;
+      background:#fff;
+      color:#1f2937;
     }
-
-    .layout {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) 360px;
-      gap: 18px;
-      align-items: start;
+    .two{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
     }
-
-    .panel {
-      padding: 20px;
+    .checkbox{
+      display:flex;
+      align-items:center;
+      gap:7px;
+      font-size:11px;
+      font-weight:600;
+      color:#2d3642;
+      margin-bottom:8px;
     }
-
-    .section-head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 18px;
-      gap: 12px;
+    .checkbox .box{
+      width:12px;height:12px;border:1px solid #9fb6ab;border-radius:2px;background:#fff;
     }
-
-    .section-head h2 {
-      margin: 0;
-      font-size: 20px;
+    .summary{
+      overflow:hidden;
     }
-
-    .section-head p {
-      margin: 6px 0 0;
-      color: var(--muted);
-      font-size: 13px;
+    .summary-head{
+      background:var(--green);
+      color:#fff;
+      font-size:12px;
+      font-weight:700;
+      padding:12px 14px;
     }
-
-    .badge {
-      background: #edf3fb;
-      color: var(--brand);
-      border: 1px solid #dce7f6;
-      padding: 8px 10px;
-      border-radius: 999px;
-      font-size: 12px;
-      font-weight: 800;
-      white-space: nowrap;
+    .summary-body{
+      padding:14px 14px 10px;
+      font-size:12px;
     }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 16px;
+    .row{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:10px;
+      padding:6px 0;
     }
-
-    .field {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
+    .row strong{font-weight:800}
+    .divider{
+      height:1px;
+      background:#e4e8ec;
+      margin:10px 0;
     }
-
-    .field.full {
-      grid-column: 1 / -1;
+    .group-label{
+      color:#7b8aa0;
+      font-size:10px;
+      font-weight:800;
+      letter-spacing:.05em;
+      margin:6px 0 4px;
     }
-
-    label {
-      font-size: 13px;
-      font-weight: 800;
-      color: #25324a;
-      display: flex;
-      align-items: center;
-      gap: 8px;
+    .neg{color:#ea5a57;font-weight:700}
+    .pos{color:#1d9a57;font-weight:800}
+    .action-row{
+      display:grid;
+      grid-template-columns:1fr 1fr 1fr;
+      gap:8px;
+      margin-top:14px;
     }
-
-    .hint {
-      color: var(--muted);
-      font-weight: 600;
-      font-size: 12px;
+    .action-btn{
+      height:30px;
+      border-radius:4px;
+      border:1px solid #d9e0e6;
+      background:#fff;
+      font-size:11px;
+      font-weight:700;
+      color:#353f49;
     }
-
-    input, select {
-      width: 100%;
-      padding: 14px 14px;
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      background: white;
-      font-size: 14px;
-      color: var(--text);
-      outline: none;
+    .action-btn.primary{
+      background:var(--green);
+      color:#fff;
+      border-color:#4b7e6a;
     }
-
-    input:focus, select:focus {
-      border-color: #b6c8de;
-      box-shadow: 0 0 0 4px rgba(36, 90, 148, 0.08);
+    .helper{
+      margin-top:12px;
+      border:1px solid #d8e4de;
+      background:#f7fbf9;
+      border-radius:8px;
+      padding:10px;
     }
-
-    .assist-inline {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-width: 22px;
-      height: 22px;
-      border-radius: 999px;
-      background: var(--accent-soft);
-      color: var(--accent);
-      font-size: 12px;
-      font-weight: 900;
-      cursor: pointer;
-      border: 1px solid #cfeee9;
+    .helper-title{
+      font-size:11px;
+      font-weight:800;
+      color:#29483d;
+      margin-bottom:8px;
     }
-
-    .divider {
-      height: 1px;
-      background: var(--line);
-      margin: 22px 0;
+    .helper-copy{
+      font-size:11px;
+      color:#617181;
+      line-height:1.45;
+      margin-bottom:8px;
     }
-
-    .totals {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 12px;
+    .helper-actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:6px;
+      margin-bottom:8px;
     }
-
-    .total-card {
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      padding: 16px;
-      background: #fbfdff;
+    .mini-btn{
+      font-size:10px;
+      font-weight:800;
+      color:var(--green);
+      background:#fff;
+      border:1px solid #cfe1d8;
+      border-radius:999px;
+      padding:4px 8px;
+      cursor:pointer;
     }
-
-    .total-card .label {
-      color: var(--muted);
-      font-size: 12px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.25px;
-      margin-bottom: 8px;
+    .helper-panel{
+      border-top:1px solid #dfebe5;
+      padding-top:8px;
+      font-size:11px;
+      color:#4f5f70;
+      line-height:1.45;
     }
-
-    .total-card .value {
-      font-size: 24px;
-      font-weight: 800;
-    }
-
-    .total-card.highlight {
-      background: linear-gradient(135deg, #eff7f6 0%, #f9fffe 100%);
-      border-color: #cce9e4;
-    }
-
-    .drawer {
-      position: sticky;
-      top: 24px;
-      overflow: hidden;
-    }
-
-    .drawer-head {
-      padding: 18px 18px 12px;
-      border-bottom: 1px solid var(--line);
-    }
-
-    .drawer-head h3 {
-      margin: 0;
-      font-size: 18px;
-    }
-
-    .drawer-head p {
-      margin: 6px 0 0;
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.5;
-    }
-
-    .drawer-body {
-      padding: 16px 18px 18px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .quick-actions {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 10px;
-    }
-
-    .quick-btn {
-      border: 1px solid var(--line);
-      background: white;
-      border-radius: 14px;
-      padding: 14px;
-      text-align: left;
-      cursor: pointer;
-      transition: 0.2s ease;
-    }
-
-    .quick-btn:hover {
-      border-color: #bfd2ea;
-      background: #fbfdff;
-    }
-
-    .quick-title {
-      font-size: 14px;
-      font-weight: 800;
-      margin-bottom: 4px;
-    }
-
-    .quick-copy {
-      font-size: 12px;
-      color: var(--muted);
-      line-height: 1.45;
-    }
-
-    .assist-box {
-      border: 1px dashed #cfe0f3;
-      background: #f9fbfe;
-      border-radius: 14px;
-      padding: 14px;
-    }
-
-    .assist-box h4 {
-      margin: 0 0 6px;
-      font-size: 14px;
-    }
-
-    .assist-box p {
-      margin: 0;
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.5;
-    }
-
-    .assistant-form {
-      display: grid;
-      gap: 10px;
-    }
-
-    .apply-row {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-top: 2px;
-    }
-
-    .btn-primary {
-      background: var(--brand);
-      color: white;
-    }
-
-    .btn-secondary {
-      background: #f4f7fb;
-      color: var(--brand);
-      border: 1px solid var(--line);
-    }
-
-    .preview {
-      border: 1px solid #d8ebe8;
-      background: #f3fbfa;
-      color: #0f5e59;
-      border-radius: 14px;
-      padding: 14px;
-      font-size: 13px;
-      line-height: 1.5;
-    }
-
-    .footnote {
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.5;
-    }
-
-    @media (max-width: 1180px) {
-      .layout, .hero-row {
-        grid-template-columns: 1fr;
-      }
-      .totals {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-
-    @media (max-width: 760px) {
-      .shell { padding: 14px; }
-      .grid, .summary-grid, .totals {
-        grid-template-columns: 1fr;
-      }
-      .topbar {
-        flex-direction: column;
-        align-items: stretch;
-      }
-      h1 { font-size: 28px; }
+    @media (max-width: 900px){
+      .grid{grid-template-columns:1fr}
+      .wrap{max-width:760px}
     }
   </style>
 </head>
 <body>
   <div class="topbar">
-    <div class="brand-wrap">
-      <div class="brand">Teleo Title</div>
-      <div class="subbrand">Net Sheet v3 concept • calculator first, assistive AI second</div>
-    </div>
-    <div class="top-actions">
-      <button class="btn btn-light">Import Offer / Contract</button>
-      <button class="btn btn-light">Share Estimate</button>
-      <button class="btn btn-accent">Export PDF</button>
+    <div class="logo">TeleoTitle</div>
+    <div class="nav">
+      <div>Services</div>
+      <div>Calendar</div>
+      <div>About</div>
+      <div>Contact us</div>
     </div>
   </div>
 
-  <div class="shell">
-    <div class="hero-row">
-      <div class="hero-card">
-        <div class="eyebrow">Estimate faster without changing the core flow</div>
-        <h1>Teleo-style net sheet with a lighter, more useful assist layer</h1>
-        <p class="hero-copy">
-          This mockup keeps the familiar no-login net sheet experience front and center, while moving AI into a smaller
-          helper role focused on the two hardest inputs: taxes and loan payoff.
-        </p>
-      </div>
-
-      <div class="summary-card">
-        <div>
-          <div class="eyebrow">Deal Snapshot</div>
-          <div class="summary-grid">
-            <div class="metric">
-              <div class="metric-label">Address</div>
-              <div class="metric-value" style="font-size:16px;">1234 Example Ln</div>
-            </div>
-            <div class="metric">
-              <div class="metric-label">Closing</div>
-              <div class="metric-value" style="font-size:16px;">May 12</div>
-            </div>
-            <div class="metric">
-              <div class="metric-label">County</div>
-              <div class="metric-value" style="font-size:16px;">Williamson</div>
-            </div>
-          </div>
-        </div>
-      </div>
+  <div class="wrap">
+    <h1>Seller Net Sheet Calculator</h1>
+    <div class="subtitle">
+      Estimate your proceeds from selling your property in Texas. Adjust the values below to see how different factors affect your net proceeds.
     </div>
 
-    <div class="layout">
-      <div class="panel">
-        <div class="section-head">
-          <div>
-            <h2>Seller Net Sheet</h2>
-            <p>Familiar structure, cleaner spacing, with inline assist only where it adds value.</p>
-          </div>
-          <div class="badge">No Login Required</div>
-        </div>
-
-        <div class="grid">
-          <div class="field">
-            <label>Property Address</label>
-            <input value="1234 Example Ln, Georgetown, TX" />
+    <div class="grid">
+      <div class="card form-card">
+        <div class="section">
+          <div class="section-head">
+            <div class="left"><span class="icon">▣</span><span>Transaction Details</span></div>
+            <button class="import-btn">↥ Import Contract</button>
           </div>
 
           <div class="field">
-            <label>County</label>
-            <select>
-              <option>Williamson</option>
-              <option>Travis</option>
-              <option>Bell</option>
-            </select>
+            <div class="label">Sales Price</div>
+            <input value="$ 350000" />
           </div>
 
           <div class="field">
-            <label>Sales Price</label>
-            <input value="$425,000" />
-          </div>
-
-          <div class="field">
-            <label>Earnest Money</label>
-            <input value="$5,000" />
-          </div>
-
-          <div class="field">
-            <label>Closing Date</label>
-            <input value="05/12/2026" />
-          </div>
-
-          <div class="field">
-            <label>Title Policy</label>
-            <select>
-              <option>Owner Policy</option>
-              <option>Owner + Lender</option>
-            </select>
-          </div>
-
-          <div class="field">
-            <label>
-              Property Taxes
-              <span class="assist-inline" onclick="loadAssist('tax')">⚡</span>
-              <span class="hint">estimate helper</span>
-            </label>
-            <input id="taxField" value="$4,850" />
-          </div>
-
-          <div class="field">
-            <label>
-              Loan Payoff
-              <span class="assist-inline" onclick="loadAssist('payoff')">⚡</span>
-              <span class="hint">estimate helper</span>
-            </label>
-            <input id="payoffField" value="$281,200" />
-          </div>
-
-          <div class="field">
-            <label>Listing Commission</label>
-            <input value="3%" />
-          </div>
-
-          <div class="field">
-            <label>Buyer Commission</label>
-            <input value="3%" />
-          </div>
-
-          <div class="field">
-            <label>HOA Dues / Estoppel</label>
-            <input value="$450" />
-          </div>
-
-          <div class="field">
-            <label>Seller Concessions</label>
-            <input value="$0" />
-          </div>
-
-          <div class="field full">
-            <label>Additional Notes</label>
-            <input placeholder="Special assessments, repairs, negotiated credits..." />
+            <div class="label">Estimated Closing Date</div>
+            <input value="May 8, 2026" />
           </div>
         </div>
 
-        <div class="divider"></div>
+        <div class="section">
+          <div class="section-head">
+            <div class="left"><span>Commissions</span></div>
+            <div>⌃</div>
+          </div>
 
-        <div class="section-head">
-          <div>
-            <h2>Estimated Summary</h2>
-            <p>Use this area to keep the quick decision-making front and center.</p>
+          <div class="field">
+            <div class="label">Calculate Commissions As</div>
+            <select><option>Percentage</option></select>
+          </div>
+
+          <div class="two">
+            <div class="field">
+              <div class="label">Listing Agent</div>
+              <input value="3" />
+            </div>
+            <div class="field">
+              <div class="label">Buyer's Agent</div>
+              <input value="3" />
+            </div>
           </div>
         </div>
 
-        <div class="totals">
-          <div class="total-card">
-            <div class="label">Gross Sale</div>
-            <div class="value">$425,000</div>
+        <div class="section">
+          <div class="section-head">
+            <div class="left"><span>Loan Payoffs</span></div>
+            <div>⌃</div>
           </div>
-          <div class="total-card">
-            <div class="label">Payoffs + Taxes</div>
-            <div class="value">$286,050</div>
+
+          <div class="checkbox"><span class="box"></span><span>Primary Loan Payoff</span></div>
+          <div class="field">
+            <div class="label">
+              Estimated Payoff
+              <span class="assist-link" onclick="setHelper('payoff')">⚡ Estimate</span>
+            </div>
+            <input id="payoffField" value="$ 0" />
           </div>
-          <div class="total-card">
-            <div class="label">Commissions + Fees</div>
-            <div class="value">$27,210</div>
+
+          <div class="checkbox"><span class="box"></span><span>Additional Lien / HELOC Payoff</span></div>
+        </div>
+
+        <div class="section">
+          <div class="section-head">
+            <div class="left"><span>Title &amp; Closing</span></div>
+            <div>⌃</div>
           </div>
-          <div class="total-card highlight">
-            <div class="label">Estimated Net</div>
-            <div class="value">$111,740</div>
+
+          <div class="field">
+            <div class="label">Buyer Financing</div>
+            <select><option>Loan</option></select>
           </div>
+
+          <div class="field">
+            <div class="label">Owner's Title Policy Paid By</div>
+            <select><option>Seller</option></select>
+          </div>
+
+          <div class="field">
+            <div class="label">Survey Coverage (T-19)</div>
+            <select><option>Seller Pays</option></select>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-head">
+            <div class="left"><span>Taxes &amp; HOA</span></div>
+            <div>⌃</div>
+          </div>
+
+          <div class="field">
+            <div class="label">
+              Annual Property Taxes
+              <span class="assist-link" onclick="setHelper('tax')">⚡ Estimate</span>
+            </div>
+            <input id="taxField" value="$ 6000" />
+          </div>
+
+          <div class="checkbox"><span class="box"></span><span>HOA in this subdivision</span></div>
+        </div>
+
+        <div class="section">
+          <div class="section-head">
+            <div class="left"><span>Credits to Buyer</span></div>
+            <div>⌃</div>
+          </div>
+
+          <div class="checkbox"><span class="box"></span><span>Seller paying buyer's discount points</span></div>
+          <div class="checkbox"><span class="box"></span><span>Include home warranty</span></div>
+          <div class="checkbox"><span class="box"></span><span>Seller paying for repairs</span></div>
+          <div class="checkbox"><span class="box"></span><span>Additional credits to buyer</span></div>
         </div>
       </div>
 
-      <div class="drawer">
-        <div class="drawer-head">
-          <h3>Estimate Helper</h3>
-          <p>Not a full chat. Just quick, controlled assist for the fields that are hardest to estimate from the contract alone.</p>
-        </div>
+      <div class="card summary">
+        <div class="summary-head">Your Estimated Seller's Net Sheet</div>
+        <div class="summary-body">
+          <div class="row"><strong>Sales Price</strong><strong>$350,000.00</strong></div>
 
-        <div class="drawer-body">
-          <div class="quick-actions">
-            <button class="quick-btn" onclick="loadAssist('tax')">
-              <div class="quick-title">Estimate Property Taxes</div>
-              <div class="quick-copy">Use county, price, and timing to generate a quick estimate and apply it directly.</div>
-            </button>
+          <div class="divider"></div>
+          <div class="group-label">COMMISSIONS</div>
+          <div class="row"><span>Listing Agent Commission</span><strong>$10,500.00</strong></div>
+          <div class="row"><span>Buyer's Agent Commission</span><strong>$10,500.00</strong></div>
+          <div class="row"><strong>Total Commissions</strong><strong>$21,000.00</strong></div>
 
-            <button class="quick-btn" onclick="loadAssist('payoff')">
-              <div class="quick-title">Estimate Loan Payoff</div>
-              <div class="quick-copy">Guide the agent through approximate balance inputs without requiring exact lender docs.</div>
-            </button>
+          <div class="divider"></div>
+          <div class="group-label">TITLE &amp; CLOSING</div>
+          <div class="row"><span>Owner's Title Policy</span><strong>$2,015.00</strong></div>
+          <div class="row"><span>Survey Coverage (T-19) ⓘ</span><strong>$100.75</strong></div>
+          <div class="row"><span>Escrow Fee</span><strong>$650.00</strong></div>
+          <div class="row"><span>Deed Preparation</span><strong>$175.00</strong></div>
+          <div class="row"><span>County Recording Fees</span><strong>$50.00</strong></div>
+          <div class="row"><span>Tax Certificate</span><strong>$65.00</strong></div>
+          <div class="row"><strong>Total Title &amp; Closing</strong><strong>$3,055.75</strong></div>
 
-            <button class="quick-btn" onclick="loadAssist('fees')">
-              <div class="quick-title">Common Seller Adjustments</div>
-              <div class="quick-copy">Quick add common line items like HOA, estoppel, credits, and misc. seller-side costs.</div>
-            </button>
+          <div class="divider"></div>
+          <div class="group-label">TAXES &amp; HOA</div>
+          <div class="row"><span>Prorated Taxes</span><strong id="taxSummary">$2,104.11</strong></div>
+          <div class="row"><strong>Total Taxes &amp; HOA</strong><strong id="taxTotal">$2,104.11</strong></div>
+
+          <div class="divider"></div>
+          <div class="group-label">ESTIMATED CASH TO SELLER</div>
+          <div class="row"><span>Sales Price</span><strong>$350,000.00</strong></div>
+          <div class="row"><span>Total Commissions</span><strong class="neg">- $21,000.00</strong></div>
+          <div class="row"><span>Total Title &amp; Closing</span><strong class="neg">- $3,055.75</strong></div>
+          <div class="row"><span>Total Taxes &amp; HOA</span><strong class="neg">- <span id="taxCash">$2,104.11</span></strong></div>
+          <div class="row" style="padding-top:10px;"><strong style="font-size:18px;">Estimated Cash to Seller</strong><strong class="pos" id="netValue" style="font-size:18px;">$323,840.14</strong></div>
+
+          <div class="action-row">
+            <button class="action-btn">🗎 PDF</button>
+            <button class="action-btn">⎙ Print</button>
+            <button class="action-btn primary">Contact us</button>
           </div>
 
-          <div id="assistContent" class="assist-box">
-            <h4>Start with an assist action</h4>
-            <p>Select a helper above or click the ⚡ icons beside Property Taxes or Loan Payoff to load a narrower estimation workflow.</p>
-          </div>
-
-          <div class="preview">
-            Suggested interaction model: structured prompts, session caps, and rate limiting — not an open-ended chat box.
-          </div>
-
-          <div class="footnote">
-            This concept keeps the net sheet primary and treats AI as a low-friction helper, which matches the no-login goal while reducing token abuse risk.
+          <div class="helper">
+            <div class="helper-title">Estimate Helper</div>
+            <div class="helper-copy">
+              Keep the current calculator flow intact. Use guided estimate actions only for taxes and payoff.
+            </div>
+            <div class="helper-actions">
+              <button class="mini-btn" onclick="setHelper('tax')">Estimate Taxes</button>
+              <button class="mini-btn" onclick="setHelper('payoff')">Estimate Payoff</button>
+            </div>
+            <div class="helper-panel" id="helperPanel">
+              Select a helper action to load a small assistive workflow here instead of a full AI chat.
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  <script>
-    function loadAssist(type) {
-      const content = document.getElementById('assistContent');
-
-      if (type === 'tax') {
-        content.innerHTML = `
-          <h4>Estimate Property Taxes</h4>
-          <div class="assistant-form">
-            <input id="taxCounty" value="Williamson County" />
-            <input id="taxValue" value="$425,000 sales price" />
-            <input id="taxTiming" value="Closing in May / prorated estimate" />
-          </div>
-          <div class="apply-row">
-            <button class="btn btn-primary" onclick="applyTax()">Generate & Apply</button>
-            <button class="btn btn-secondary" onclick="resetAssist()">Cancel</button>
-          </div>
-        `;
-        return;
-      }
-
-      if (type === 'payoff') {
-        content.innerHTML = `
-          <h4>Estimate Loan Payoff</h4>
-          <div class="assistant-form">
-            <input id="loanBalance" value="$279,500 approximate unpaid principal" />
-            <input id="loanRate" value="6.25% interest rate (optional)" />
-            <input id="loanPerDiem" value="$52/day per diem estimate (optional)" />
-          </div>
-          <div class="apply-row">
-            <button class="btn btn-primary" onclick="applyPayoff()">Generate & Apply</button>
-            <button class="btn btn-secondary" onclick="resetAssist()">Cancel</button>
-          </div>
-        `;
-        return;
-      }
-
-      if (type === 'fees') {
-        content.innerHTML = `
-          <h4>Common Seller Adjustments</h4>
-          <div class="assistant-form">
-            <input value="HOA estoppel: $275" />
-            <input value="Home warranty credit: $0" />
-            <input value="Repair / concession credit: $0" />
-          </div>
-          <div class="apply-row">
-            <button class="btn btn-primary" onclick="resetAssist()">Apply Adjustments</button>
-            <button class="btn btn-secondary" onclick="resetAssist()">Done</button>
-          </div>
-        `;
-      }
-    }
-
-    function applyTax() {
-      document.getElementById('taxField').value = '$5,040';
-      document.getElementById('assistContent').innerHTML = `
-        <h4>Tax estimate applied</h4>
-        <p>Property Taxes updated to <strong>$5,040</strong> based on county, price context, and closing timing assumptions.</p>
-      `;
-    }
-
-    function applyPayoff() {
-      document.getElementById('payoffField').value = '$282,015';
-      document.getElementById('assistContent').innerHTML = `
-        <h4>Loan payoff estimate applied</h4>
-        <p>Loan Payoff updated to <strong>$282,015</strong> using approximate principal and soft per diem assumptions.</p>
-      `;
-    }
-
-    function resetAssist() {
-      document.getElementById('assistContent').innerHTML = `
-        <h4>Start with an assist action</h4>
-        <p>Select a helper above or click the ⚡ icons beside Property Taxes or Loan Payoff to load a narrower estimation workflow.</p>
-      `;
-    }
-  </script>
+<script>
+function setHelper(type){
+  const panel = document.getElementById('helperPanel');
+  if(type === 'tax'){
+    panel.innerHTML = `
+      <strong>Tax estimate loaded.</strong><br>
+      Based on county + sales price + closing date assumptions, apply a soft estimate for prorated taxes.
+      <div style="margin-top:8px;">
+        <button class="mini-btn" onclick="applyTax()">Apply $6,250 annual taxes</button>
+      </div>
+    `;
+  }
+  if(type === 'payoff'){
+    panel.innerHTML = `
+      <strong>Loan payoff estimate loaded.</strong><br>
+      Use approximate principal balance and soft per-diem assumptions without requiring an exact lender payoff.
+      <div style="margin-top:8px;">
+        <button class="mini-btn" onclick="applyPayoff()">Apply $184,500 payoff</button>
+      </div>
+    `;
+  }
+}
+function applyTax(){
+  document.getElementById('taxField').value = '$ 6250';
+  document.getElementById('taxSummary').textContent = '$2,191.78';
+  document.getElementById('taxTotal').textContent = '$2,191.78';
+  document.getElementById('taxCash').textContent = '$2,191.78';
+  document.getElementById('netValue').textContent = '$323,752.47';
+  document.getElementById('helperPanel').innerHTML = 'Tax estimate applied to the field and reflected in the summary card.';
+}
+function applyPayoff(){
+  document.getElementById('payoffField').value = '$ 184500';
+  document.getElementById('helperPanel').innerHTML = 'Loan payoff estimate applied to the payoff field. In a production version, this would also update the right-side summary totals.';
+}
+</script>
 </body>
 </html>
