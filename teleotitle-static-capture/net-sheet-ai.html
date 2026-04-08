@@ -681,6 +681,7 @@ let conversationHistory = [];
 let currentFields = {};
 let displayMode = 'seller';
 let isLoading = false;
+const ANTHROPIC_API_KEY = window.ANTHROPIC_API_KEY || 'sk-ant-...';
 
 function txRate(price) {
   if (price <= 100000) return price * 0.0087;
