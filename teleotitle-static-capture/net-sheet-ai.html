@@ -672,8 +672,56 @@
 </div>
 
 <script>
-const API_ENDPOINT = '/api/chat';
-const ANTHROPIC_API_KEY = window.ANTHROPIC_API_KEY || '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';
+// ─── CONFIGURATION ────────────────────────────────────────────────────────────
+// Set your Anthropic API key here, OR set window.ANTHROPIC_API_KEY before this
+// script loads (e.g. from a server-rendered template variable).
+//
+// For Vercel deployment: remove the key here and use the /api/chat backend instead
+// by setting: const USE_BACKEND = true;
+//
+// For GitHub Pages / static hosting: paste your key below.
+// Note: key will be visible in page source — use only for internal/agent tools.
+const ANTHROPIC_API_KEY = window.ANTHROPIC_API_KEY || 'YOUR_API_KEY_HERE';
+const USE_BACKEND = false; // set true if deploying on Vercel with api/chat.js
+const BACKEND_ENDPOINT = '/api/chat';
+// ─────────────────────────────────────────────────────────────────────────────
+
+const SYSTEM_PROMPT = `You are a friendly, expert net sheet assistant for Teleo Title, a title company in Georgetown, Texas. Your job is to help real estate agents quickly build net sheets by extracting deal details from natural conversation.
+
+BEHAVIOR RULES:
+- Extract structured fields from the agent's message whenever possible
+- Never ask for more than 2 pieces of information at a time
+- Once you have sale_price, give a partial estimate — don't wait for everything
+- Be warm, concise, and professional — 1-3 sentences max per reply
+- Use Texas real estate terminology naturally
+- If the agent mentions Georgetown or Williamson County area, default county to "williamson"
+- Distinguish seller vs buyer transactions from context clues
+
+FIELDS YOU EXTRACT (include in updated_fields only what you found this turn):
+- sale_price: number
+- loan_payoff: number (seller's existing mortgage payoff)
+- loan_amount: number (buyer's new loan)
+- loan_type: "conventional" | "fha" | "va" | "cash"
+- list_commission_pct: number
+- buyer_commission_pct: number
+- county: "williamson" | "travis" | "hays" | "bastrop" | "other"
+- transaction_type: "residential" | "commercial" | "land" | "refi"
+- transaction_mode: "seller" | "buyer"
+- has_hoa: boolean
+- has_survey: boolean
+- home_warranty: boolean
+- owner_policy: boolean
+- lender_policy: boolean
+- concessions: number
+
+ALWAYS respond with valid JSON only — no markdown, no preamble:
+{
+  "message": "Your conversational reply",
+  "updated_fields": { "sale_price": 485000 },
+  "extracted_fields": [{ "key": "sale_price", "label": "Sale price $485,000" }],
+  "missing_fields": ["has_hoa"]
+}`;
+
 const fmt = n => '$' + Math.round(Math.abs(n)).toLocaleString();
 const pct = (a,b) => b ? ((Math.abs(a)/b)*100).toFixed(1)+'%' : '0%';
 
@@ -681,7 +729,6 @@ let conversationHistory = [];
 let currentFields = {};
 let displayMode = 'seller';
 let isLoading = false;
-const ANTHROPIC_API_KEY = window.ANTHROPIC_API_KEY || 'sk-ant-...';
 
 function txRate(price) {
   if (price <= 100000) return price * 0.0087;
@@ -875,6 +922,69 @@ function showError(msg) {
   setTimeout(() => area.innerHTML = '', 5000);
 }
 
+async function callAI(messages, currentFields) {
+  const fieldsCtx = Object.keys(currentFields).length
+    ? `\n\nFIELDS ALREADY COLLECTED: ${JSON.stringify(currentFields)}`
+    : '';
+
+  if (USE_BACKEND) {
+    const res = await fetch(BACKEND_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ messages, current_fields: currentFields })
+    });
+    if (!res.ok) {
+      const e = await res.json().catch(() => ({}));
+      throw new Error(e.error || `Server error ${res.status}`);
+    }
+    return res.json();
+  }
+
+  // Direct browser call to Anthropic API (GitHub Pages / static hosting)
+  if (!ANTHROPIC_API_KEY || ANTHROPIC_API_KEY === 'YOUR_API_KEY_HERE') {
+    throw new Error('No API key set. Open net-sheet-ai.html and set ANTHROPIC_API_KEY at the top of the script.');
+  }
+
+  const res = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': ANTHROPIC_API_KEY,
+      'anthropic-version': '2023-06-01',
+      'anthropic-dangerous-direct-browser-access': 'true'
+    },
+    body: JSON.stringify({
+      model: 'claude-haiku-4-5-20251001',
+      max_tokens: 1024,
+      system: SYSTEM_PROMPT + fieldsCtx,
+      messages: messages.slice(-10)
+    })
+  });
+
+  if (!res.ok) {
+    const e = await res.json().catch(() => ({}));
+    throw new Error(e.error?.message || `Anthropic API error ${res.status}`);
+  }
+
+  const raw = await res.json();
+  const text = raw.content?.[0]?.text || '';
+  const cleaned = text.replace(/```json\n?|```\n?/g, '').trim();
+
+  let parsed;
+  try {
+    parsed = JSON.parse(cleaned);
+  } catch {
+    parsed = { message: text, updated_fields: {}, extracted_fields: [], missing_fields: [] };
+  }
+
+  return {
+    message: parsed.message || "I've updated your net sheet.",
+    updated_fields: parsed.updated_fields || {},
+    extracted_fields: parsed.extracted_fields || [],
+    missing_fields: parsed.missing_fields || []
+  };
+}
+
 async function sendMessage() {
   const input = document.getElementById('chatInput');
   const text = input.value.trim();
@@ -892,38 +1002,29 @@ async function sendMessage() {
   showTyping();
 
   try {
-    const response = await fetch(API_ENDPOINT, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        messages: conversationHistory,
-        current_fields: currentFields
-      })
-    });
-
+    const data = await callAI(conversationHistory, currentFields);
     removeTyping();
 
-    if (!response.ok) {
-      const err = await response.json().catch(() => ({}));
-      throw new Error(err.error || `Server error ${response.status}`);
-    }
-
-    const data = await response.json();
-
-    if (data.updated_fields) {
+    if (data.updated_fields && Object.keys(data.updated_fields).length) {
       currentFields = { ...currentFields, ...data.updated_fields };
       renderNetSheet(currentFields);
     }
 
-    const pills = data.extracted_fields ? data.extracted_fields.map(f => f.label) : [];
+    const pills = (data.extracted_fields || []).map(f => f.label);
     appendMessage('agent', data.message, pills);
     conversationHistory.push({ role: 'assistant', content: data.message });
 
   } catch (err) {
     removeTyping();
-    showError('Could not reach the assistant. ' + err.message);
-    appendMessage('agent', "I'm having trouble connecting right now. You can still use the form fields on the right to build your net sheet manually.");
-    conversationHistory.push({ role: 'assistant', content: "I'm having trouble connecting right now." });
+    const isKeyError = err.message.includes('API key') || err.message.includes('No API key');
+    showError(isKeyError
+      ? 'API key not configured. See setup instructions in the HTML file.'
+      : 'Could not reach the assistant: ' + err.message
+    );
+    appendMessage('agent', isKeyError
+      ? 'The AI assistant needs an API key to work. Ask your developer to add the Anthropic API key to the page config.'
+      : "I'm having trouble connecting right now. You can describe your deal and I'll try again."
+    );
   }
 
   isLoading = false;
