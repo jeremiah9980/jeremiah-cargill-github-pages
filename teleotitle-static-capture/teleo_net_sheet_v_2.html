@@ -946,7 +946,7 @@
   </div>
 
   <script>
-    const API_ENDPOINT = '/api/chat';
+    const API_ENDPOINT =   window.NET_SHEET_API_ENDPOINT ||   "https://teleo-ai-title-os.vercel.app/api/chat";
     const fmtMoney = (n) => '$' + Math.round(Math.abs(Number(n) || 0)).toLocaleString();
     const fmtPct = (n) => `${Number(n).toFixed(1).replace('.0','')}%`;
 
